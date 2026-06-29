@@ -1,0 +1,17 @@
+[Unit]
+Description=PixelDay API
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/pixelday/server
+EnvironmentFile=/opt/pixelday/server/.env
+ExecStart=/usr/bin/node /opt/pixelday/server/dist/index.js
+Restart=always
+RestartSec=5
+User=pixelday
+Group=pixelday
+
+[Install]
+WantedBy=multi-user.target
