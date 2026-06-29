@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nhật ký - PixelDay</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-error-container": "#93000a",
+                    "surface-container": "#f1edef",
+                    "surface-container-lowest": "#ffffff",
+                    "inverse-surface": "#313032",
+                    "surface-variant": "#e5e1e4",
+                    "on-surface": "#1c1b1d",
+                    "primary": "#5e5c75",
+                    "on-secondary-fixed-variant": "#2a4e3a",
+                    "tertiary": "#6e5a50",
+                    "on-tertiary": "#ffffff",
+                    "on-error": "#ffffff",
+                    "on-background": "#1c1b1d",
+                    "on-tertiary-fixed-variant": "#554339",
+                    "outline": "#78767d",
+                    "tertiary-container": "#fadfd1",
+                    "on-primary-container": "#66637c",
+                    "error-container": "#ffdad6",
+                    "background": "#fcf8fa",
+                    "tertiary-fixed-dim": "#dbc1b4",
+                    "surface-tint": "#5e5c75",
+                    "on-secondary-container": "#486c57",
+                    "surface-bright": "#fcf8fa",
+                    "surface-container-low": "#f7f2f5",
+                    "on-primary-fixed-variant": "#46445c",
+                    "surface-container-highest": "#e5e1e4",
+                    "on-primary": "#ffffff",
+                    "on-primary-fixed": "#1b192e",
+                    "secondary": "#426651",
+                    "on-surface-variant": "#47464d",
+                    "outline-variant": "#c9c5cd",
+                    "primary-fixed": "#e4dffd",
+                    "secondary-fixed-dim": "#a8d0b6",
+                    "secondary-fixed": "#c3ecd2",
+                    "tertiary-fixed": "#f8ddcf",
+                    "error": "#ba1a1a",
+                    "inverse-primary": "#c8c3e0",
+                    "surface": "#fcf8fa",
+                    "primary-container": "#e6e1ff",
+                    "on-tertiary-container": "#756156",
+                    "primary-fixed-dim": "#c8c3e0",
+                    "on-secondary": "#ffffff",
+                    "on-secondary-fixed": "#002112",
+                    "secondary-container": "#c3ecd2",
+                    "on-tertiary-fixed": "#261810",
+                    "inverse-on-surface": "#f4f0f2",
+                    "surface-container-high": "#ebe7e9",
+                    "surface-dim": "#ddd9db"
+            },
+            "borderRadius": {
+                    "DEFAULT": "1rem",
+                    "lg": "2rem",
+                    "xl": "3rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-padding": "24px",
+                    "grid-gutter": "16px",
+                    "stack-gap-sm": "12px",
+                    "stack-gap-md": "20px",
+                    "stack-gap-lg": "32px",
+                    "unit": "4px"
+            },
+            "fontFamily": {
+                    "headline-lg": ["Outfit"],
+                    "label-md": ["Outfit"],
+                    "headline-md": ["Outfit"],
+                    "body-lg": ["Outfit"],
+                    "title-lg": ["Outfit"],
+                    "display-lg": ["Outfit"],
+                    "headline-lg-mobile": ["Outfit"],
+                    "body-md": ["Outfit"],
+                    "label-lg": ["Outfit"]
+            },
+            "fontSize": {
+                    "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                    "label-md": ["11px", {"lineHeight": "16px", "fontWeight": "500"}],
+                    "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                    "body-lg": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                    "title-lg": ["20px", {"lineHeight": "28px", "fontWeight": "500"}],
+                    "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                    "headline-lg-mobile": ["28px", {"lineHeight": "36px", "fontWeight": "600"}],
+                    "body-md": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                    "label-lg": ["12px", {"lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "600"}]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Outfit', sans-serif; }
+        /* Custom scrollbar for text area to keep it clean */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e5e1e4; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #c9c5cd; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="w-full top-0 sticky z-40 bg-background/80 backdrop-blur-md">
+<div class="flex items-center justify-between px-container-padding py-stack-gap-md max-w-7xl mx-auto w-full">
+<div class="flex items-center gap-4">
+<button class="md:hidden text-primary dark:text-primary-fixed hover:bg-surface-variant/50 p-2 rounded-full transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="menu" data-weight="fill" style="font-variation-settings: 'FILL' 1;">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-primary tracking-tight">PixelDay</h1>
+</div>
+<!-- Desktop Navigation Integration in TopAppBar -->
+<nav class="hidden md:flex items-center gap-8">
+<a class="text-on-surface-variant hover:bg-surface-variant/50 px-4 py-2 rounded-full transition-colors duration-200 font-label-lg text-label-lg" href="#">Hôm nay</a>
+<a class="text-on-surface-variant hover:bg-surface-variant/50 px-4 py-2 rounded-full transition-colors duration-200 font-label-lg text-label-lg" href="#">Công việc</a>
+<a class="text-on-surface-variant hover:bg-surface-variant/50 px-4 py-2 rounded-full transition-colors duration-200 font-label-lg text-label-lg" href="#">Lịch</a>
+<a class="text-primary bg-primary-container px-6 py-2 rounded-full transition-colors duration-200 font-label-lg text-label-lg shadow-sm" href="#">Nhật ký</a>
+<a class="text-on-surface-variant hover:bg-surface-variant/50 px-4 py-2 rounded-full transition-colors duration-200 font-label-lg text-label-lg" href="#">Hồ sơ</a>
+</nav>
+<button class="text-primary dark:text-primary-fixed hover:bg-surface-variant/50 p-2 rounded-full transition-colors duration-200">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-2xl mx-auto px-container-padding pb-32 md:pb-16 pt-4 flex flex-col gap-stack-gap-lg">
+<!-- Date Selector Header -->
+<section class="flex items-center justify-between">
+<div>
+<h2 class="font-headline-md text-headline-md text-on-surface mb-1">Nhật ký của tôi</h2>
+<div class="flex items-center gap-3">
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-variant transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_left">chevron_left</span>
+</button>
+<span class="font-title-lg text-title-lg text-primary font-medium tracking-wide">Thứ Ba, 24 Tháng 10</span>
+<button class="w-8 h-8 flex items-center justify-center rounded-full bg-surface-container hover:bg-surface-variant transition-colors text-on-surface-variant">
+<span class="material-symbols-outlined text-sm" data-icon="chevron_right">chevron_right</span>
+</button>
+</div>
+</div>
+<div class="hidden md:flex bg-secondary-container text-on-secondary-container px-4 py-2 rounded-full items-center gap-2 shadow-sm shadow-secondary/10">
+<span class="material-symbols-outlined text-sm" data-icon="edit_calendar">edit_calendar</span>
+<span class="font-label-lg text-label-lg">Hôm nay</span>
+</div>
+</section>
+<!-- Journal Text Area Card -->
+<section class="bg-surface-container-lowest rounded-[32px] p-6 md:p-8 shadow-[0_8px_30px_rgb(0,0,0,0.04)] flex flex-col relative group border border-surface-variant/30 transition-shadow hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
+<div class="flex items-center gap-3 mb-4 text-primary">
+<span class="material-symbols-outlined" data-icon="draw" data-weight="fill" style="font-variation-settings: 'FILL' 1;">draw</span>
+<span class="font-label-lg text-label-lg uppercase tracking-wider text-on-surface-variant">Viết lách</span>
+</div>
+<textarea class="w-full h-64 bg-transparent outline-none resize-none font-body-lg text-body-lg text-on-surface placeholder:text-outline-variant leading-relaxed" placeholder="Hôm nay bạn thế nào? Viết vài dòng về ngày của bạn..."></textarea>
+<div class="flex justify-between items-end mt-4 pt-4 border-t border-surface-container">
+<button class="text-primary flex items-center gap-2 hover:bg-surface-container px-4 py-2 rounded-full transition-colors group">
+<span class="material-symbols-outlined text-lg transition-transform group-hover:scale-110" data-icon="format_italic">format_italic</span>
+<span class="material-symbols-outlined text-lg transition-transform group-hover:scale-110" data-icon="format_bold">format_bold</span>
+</button>
+<span class="font-label-md text-label-md text-outline">0 / 1000</span>
+</div>
+</section>
+<!-- Photos Section -->
+<section class="flex flex-col gap-4">
+<div class="flex items-center justify-between">
+<h3 class="font-title-lg text-title-lg text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-primary" data-icon="photo_library">photo_library</span>
+                    Ảnh hôm nay
+                </h3>
+<span class="font-label-md text-label-md bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full">3 ảnh</span>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+<!-- Uploaded Photo 1 -->
+<div class="aspect-square rounded-[24px] overflow-hidden relative group cursor-pointer shadow-sm">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-500 group-hover:scale-110" data-alt="A calming morning scene with a steaming cup of matcha latte on a light oak wooden table, next to an open notebook. Soft, diffused morning sunlight streams through a nearby window, creating gentle shadows. The color palette features pastel greens, warm whites, and light wood tones. Aesthetic is modern, minimal, and peaceful." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDKrtc90Q5Giy5Sg1xpUz_mcsgsacb6vRMk58gqfTAb5mfF526lrc3WBqqlqtOnI9xVqNTN2CqCGq3dRvfrcYvoJDZf1Ia-fJDu2Y9AVD7ypKMH88q8C_7PErQenl0gWgme8Bvn0nDrYA7QTi7GjMGVuxkVDUyBNCYREi9aB_wRAKt7chUDDDPjxTrI5D0whJjHsVqSGW9QOq6H8xpM693ALV73E6d8_fxFBD6Rkm-46nSxEFiv_k47r1LNKr5e99Q9AZ09kKyhG_lU')"></div>
+<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+</div>
+<!-- Uploaded Photo 2 -->
+<div class="aspect-square rounded-[24px] overflow-hidden relative group cursor-pointer shadow-sm">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-500 group-hover:scale-110" data-alt="A close-up shot of blooming cherry blossoms against a clear, soft blue sky. The focus is sharp on the delicate pink petals, with a buttery smooth bokeh background. The lighting is bright and airy, typical of a serene spring day. Colors are pastel pink, soft blue, and subtle hints of fresh green." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBTrG9AMFcYWckxfk2mDvZOI-9zLZP4zZIfuQV0r0F-_wwFSW2RhFfP8b_gKP5_DKqG_3m3bpXoJDB4LIS9X2uMLd7zGsN_bNSx-b1ub99WJGopg0XVbbVZuGfbRl4VlutGFxHhgyLH-UhHzyoGr4hnLmXuHIAvLbQ73WmE_T7I5bZXUlomaFH2TXvRIdOpGd7c2mMCGRwIq1daRu8YGuuEMEEal0PmdoCnr2pN8sBaI1PcqRVsarksawyVy7M1joaIg_R6vakp7M-4')"></div>
+<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+</div>
+<!-- Uploaded Photo 3 -->
+<div class="aspect-square rounded-[24px] overflow-hidden relative group cursor-pointer shadow-sm">
+<div class="bg-cover bg-center w-full h-full transition-transform duration-500 group-hover:scale-110" data-alt="A cozy evening setup featuring a small, warm-toned desk lamp illuminating a pile of aesthetic hardcover books. A pair of wire-rimmed glasses rests on the top book. The ambient light is soft and inviting, with a color palette of warm golds, muted lavenders, and deep but soft shadows. The mood is quiet and contemplative." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuBG6qMtDAum6CxAgtQwnJ6ShThtwOSYHqBCrGIRk80YeFtkeVm5yi1Vbaq0vbiLlV_08iZkIfK5M3bnVlJc-UXYvVgk99Jl7tLkHFUnqBYDx_4AD4m7Ih6pAJbvhCaoPI-ng-UcZpDvcfCFR0Pi3e1GY_JVN8YajtB1oAGE19rnOlc6sTxHQqALZ6V1KuWiHuFJajAf-YRtjtSGFzwzANlQsazUDRNKR0YVRidUSi_9O035DgwcDlCNBgaKmbBKppISrVLfNAu0s8pb')"></div>
+<div class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300"></div>
+</div>
+<!-- Add New Photo Card -->
+<button class="aspect-square rounded-[24px] bg-surface-container-low border-2 border-dashed border-outline-variant hover:border-primary hover:bg-primary-fixed/20 flex flex-col items-center justify-center gap-2 text-outline-variant hover:text-primary transition-all duration-200 group">
+<span class="material-symbols-outlined text-3xl group-hover:scale-110 transition-transform" data-icon="add">add</span>
+<span class="font-label-md text-label-md">Thêm ảnh</span>
+</button>
+</div>
+</section>
+<!-- Save Button Action Area -->
+<section class="mt-4 pb-8 md:pb-0">
+<button class="w-full bg-primary-container text-on-primary-container py-5 rounded-full font-title-lg text-title-lg flex items-center justify-center gap-3 shadow-[0_4px_14px_rgba(230,225,255,0.4)] hover:bg-primary-fixed hover:shadow-[0_6px_20px_rgba(230,225,255,0.6)] transform hover:-translate-y-1 transition-all duration-200 active:scale-[0.98]">
+<span class="material-symbols-outlined" data-icon="check_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                Lưu nhật ký
+            </button>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden fixed bottom-0 w-full z-50 rounded-t-3xl bg-surface-container-low shadow-[0_-4px_24px_rgba(0,0,0,0.06)] pb-safe-area">
+<div class="flex justify-around items-center pt-3 pb-6 px-4">
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/30 rounded-xl p-2 transition-all duration-150 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="today">today</span>
+<span class="font-label-md text-label-md mt-1">Hôm nay</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/30 rounded-xl p-2 transition-all duration-150 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="assignment">assignment</span>
+<span class="font-label-md text-label-md mt-1">Công việc</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/30 rounded-xl p-2 transition-all duration-150 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="calendar_today">calendar_today</span>
+<span class="font-label-md text-label-md mt-1">Lịch</span>
+</button>
+<!-- Active Tab -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-6 py-2 shadow-sm scale-105 transition-transform duration-150">
+<span class="material-symbols-outlined" data-icon="auto_stories" data-weight="fill" style="font-variation-settings: 'FILL' 1;">auto_stories</span>
+<span class="font-label-md text-label-md mt-1 font-semibold">Nhật ký</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/30 rounded-xl p-2 transition-all duration-150 group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform" data-icon="person">person</span>
+<span class="font-label-md text-label-md mt-1">Hồ sơ</span>
+</button>
+</div>
+</nav>
+<!-- Support for safe area on mobile devices -->
+<style>
+        .pb-safe-area {
+            padding-bottom: env(safe-area-inset-bottom, 24px);
+        }
+    </style>
+</body></html>

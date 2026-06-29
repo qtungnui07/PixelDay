@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PixelDay - Đăng nhập</title>
+<!-- Google Fonts: Outfit -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#93000a",
+                        "surface-container": "#f1edef",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#313032",
+                        "surface-variant": "#e5e1e4",
+                        "on-surface": "#1c1b1d",
+                        "primary": "#5e5c75",
+                        "on-secondary-fixed-variant": "#2a4e3a",
+                        "tertiary": "#6e5a50",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-background": "#1c1b1d",
+                        "on-tertiary-fixed-variant": "#554339",
+                        "outline": "#78767d",
+                        "tertiary-container": "#fadfd1",
+                        "on-primary-container": "#66637c",
+                        "error-container": "#ffdad6",
+                        "background": "#fcf8fa",
+                        "tertiary-fixed-dim": "#dbc1b4",
+                        "surface-tint": "#5e5c75",
+                        "on-secondary-container": "#486c57",
+                        "surface-bright": "#fcf8fa",
+                        "surface-container-low": "#f7f2f5",
+                        "on-primary-fixed-variant": "#46445c",
+                        "surface-container-highest": "#e5e1e4",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#1b192e",
+                        "secondary": "#426651",
+                        "on-surface-variant": "#47464d",
+                        "outline-variant": "#c9c5cd",
+                        "primary-fixed": "#e4dffd",
+                        "secondary-fixed-dim": "#a8d0b6",
+                        "secondary-fixed": "#c3ecd2",
+                        "tertiary-fixed": "#f8ddcf",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#c8c3e0",
+                        "surface": "#fcf8fa",
+                        "primary-container": "#e6e1ff",
+                        "on-tertiary-container": "#756156",
+                        "primary-fixed-dim": "#c8c3e0",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#002112",
+                        "secondary-container": "#c3ecd2",
+                        "on-tertiary-fixed": "#261810",
+                        "inverse-on-surface": "#f4f0f2",
+                        "surface-container-high": "#ebe7e9",
+                        "surface-dim": "#ddd9db"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-padding": "24px",
+                        "grid-gutter": "16px",
+                        "stack-gap-sm": "12px",
+                        "stack-gap-md": "20px",
+                        "stack-gap-lg": "32px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Outfit"],
+                        "label-md": ["Outfit"],
+                        "headline-md": ["Outfit"],
+                        "body-lg": ["Outfit"],
+                        "title-lg": ["Outfit"],
+                        "display-lg": ["Outfit"],
+                        "headline-lg-mobile": ["Outfit"],
+                        "body-md": ["Outfit"],
+                        "label-lg": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "label-md": ["11px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-lg": ["12px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for webkit */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #c9c5cd;
+            border-radius: 20px;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col relative overflow-x-hidden selection:bg-primary-container selection:text-on-primary-container">
+<!-- Top Illustration Area -->
+<div class="h-[309px] md:h-[397px] w-full relative flex-shrink-0 select-none">
+<div class="absolute inset-0 bg-cover bg-center" data-alt="A soft, beautifully composed pastel digital illustration of gentle, rolling mountains meeting a serene morning sky. The color palette features pale lavender (#e6e1ff), mint green, and very subtle peach tones. The aesthetic is clean, modern, minimal, and highly reminiscent of the Google Pixel ecosystem's airy and optimistic style. The lighting is diffused and friendly, creating a calming atmosphere for the start of a day." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuDG--07txuy5-S_ozPdZ2GzihpfLDbth8MDd1fjsrIxVuJA9VIpJUWUFQf6fHL5jurn8y-or3yYD7-DENje57qxz5Pgebmssl6sb6Aum__PpYcEF4Ve5kWx6feoH-eqPNoCoubcEY2W11EIdM8PedGCOi-399ttQ7Q_L2jXijfRJEFBEN6R55DAyJc0om8oz8VDWzD2o0lyzV0IS4BzO5qGpOiw-TzrO0eWUr8FJq8guso3KHPrv3M_82pOZuB-PcEn62WYwVZsjY4Y')"></div>
+<!-- Gradient Overlay to blend into background seamlessly -->
+<div class="absolute inset-0 bg-gradient-to-b from-transparent via-background/40 to-background"></div>
+</div>
+<!-- Main Content Canvas (Pulled up to overlap illustration) -->
+<main class="flex-1 flex flex-col px-container-padding -mt-16 md:-mt-24 relative z-10 pb-stack-gap-lg">
+<div class="max-w-md w-full mx-auto flex flex-col h-full">
+<!-- App Header -->
+<header class="text-center mb-8">
+<h1 class="font-display-lg text-display-lg text-primary tracking-tight mb-2">PixelDay</h1>
+<p class="font-title-lg text-title-lg text-on-surface-variant">Sống trọn từng ngày</p>
+</header>
+<!-- Login Card -->
+<div class="bg-surface-container-lowest rounded-xl p-6 md:p-8 shadow-[0_4px_24px_rgba(94,92,117,0.06)] flex flex-col gap-stack-gap-md transition-all duration-300">
+<!-- Input Fields -->
+<div class="flex flex-col gap-stack-gap-sm">
+<!-- Email Input -->
+<div class="flex items-center bg-surface rounded-full px-5 py-3.5 border border-outline-variant focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all duration-200">
+<span class="material-symbols-outlined text-outline mr-3">mail</span>
+<input class="bg-transparent outline-none w-full font-body-lg text-body-lg text-on-surface placeholder-on-surface-variant focus:ring-0 p-0 border-none" placeholder="Email" type="email"/>
+</div>
+<!-- Password Input -->
+<div class="flex items-center bg-surface rounded-full px-5 py-3.5 border border-outline-variant focus-within:border-primary focus-within:ring-1 focus-within:ring-primary transition-all duration-200">
+<span class="material-symbols-outlined text-outline mr-3">lock</span>
+<input class="bg-transparent outline-none w-full font-body-lg text-body-lg text-on-surface placeholder-on-surface-variant focus:ring-0 p-0 border-none" placeholder="Mật khẩu" type="password"/>
+<button aria-label="Toggle password visibility" class="material-symbols-outlined text-outline ml-3 hover:text-primary transition-colors focus:outline-none" type="button">visibility_off</button>
+</div>
+<!-- Forgot Password Link -->
+<div class="text-right mt-1">
+<a class="font-label-md text-label-md text-primary hover:text-surface-tint transition-colors" href="#">Quên mật khẩu?</a>
+</div>
+</div>
+<!-- Primary Action Button: Đăng nhập -->
+<button class="w-full bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-full flex justify-center items-center gap-2 hover:bg-[#d8d1fc] hover:shadow-sm active:scale-[0.98] transition-all duration-200 mt-2" type="button">
+                    Đăng nhập
+                </button>
+<!-- Divider -->
+<div class="flex items-center gap-4 my-2 opacity-60">
+<div class="h-px bg-outline-variant flex-1"></div>
+<span class="font-label-md text-label-md text-on-surface-variant uppercase tracking-widest">Hoặc</span>
+<div class="h-px bg-outline-variant flex-1"></div>
+</div>
+<!-- Secondary Action Button: Google Login -->
+<button class="w-full bg-surface-container-lowest border border-outline-variant text-on-surface font-label-lg text-label-lg py-3.5 rounded-full flex justify-center items-center gap-3 hover:bg-surface transition-colors duration-200 active:bg-surface-variant" type="button">
+<!-- Google G Logo SVG -->
+<svg height="20" viewbox="0 0 24 24" width="20" xmlns="http://www.w3.org/2000/svg">
+<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"></path>
+<path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"></path>
+<path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"></path>
+<path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"></path>
+</svg>
+                    Đăng nhập với Google
+                </button>
+</div>
+<!-- Outline Register Button (Outside main card for visual hierarchy) -->
+<div class="mt-8 flex flex-col items-center w-full">
+<p class="font-body-md text-body-md text-on-surface-variant mb-4">Bạn chưa có tài khoản?</p>
+<button class="w-full bg-transparent border-2 border-primary text-primary font-label-lg text-label-lg py-4 rounded-full flex justify-center items-center hover:bg-primary/5 active:bg-primary/10 transition-colors duration-200" type="button">
+                    Đăng ký ngay
+                </button>
+</div>
+</div>
+</main>
+<!-- Navigation Shells are intentionally omitted here as per semantic rules for transactional screens (Login/Register) -->
+<script>
+        // Simple script to handle password visibility toggle
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtns = document.querySelectorAll('button[aria-label="Toggle password visibility"]');
+            toggleBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const input = this.previousElementSibling;
+                    if (input.type === 'password') {
+                        input.type = 'text';
+                        this.textContent = 'visibility';
+                        this.classList.add('text-primary');
+                        this.classList.remove('text-outline');
+                    } else {
+                        input.type = 'password';
+                        this.textContent = 'visibility_off';
+                        this.classList.remove('text-primary');
+                        this.classList.add('text-outline');
+                    }
+                });
+            });
+        });
+    </script>
+</body></html>

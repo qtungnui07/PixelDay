@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+
+<html class="light" lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Hồ sơ - PixelDay</title>
+<!-- Google Fonts & Material Symbols -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#93000a",
+                        "surface-container": "#f1edef",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#313032",
+                        "surface-variant": "#e5e1e4",
+                        "on-surface": "#1c1b1d",
+                        "primary": "#5e5c75",
+                        "on-secondary-fixed-variant": "#2a4e3a",
+                        "tertiary": "#6e5a50",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-background": "#1c1b1d",
+                        "on-tertiary-fixed-variant": "#554339",
+                        "outline": "#78767d",
+                        "tertiary-container": "#fadfd1",
+                        "on-primary-container": "#66637c",
+                        "error-container": "#ffdad6",
+                        "background": "#fcf8fa",
+                        "tertiary-fixed-dim": "#dbc1b4",
+                        "surface-tint": "#5e5c75",
+                        "on-secondary-container": "#486c57",
+                        "surface-bright": "#fcf8fa",
+                        "surface-container-low": "#f7f2f5",
+                        "on-primary-fixed-variant": "#46445c",
+                        "surface-container-highest": "#e5e1e4",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#1b192e",
+                        "secondary": "#426651",
+                        "on-surface-variant": "#47464d",
+                        "outline-variant": "#c9c5cd",
+                        "primary-fixed": "#e4dffd",
+                        "secondary-fixed-dim": "#a8d0b6",
+                        "secondary-fixed": "#c3ecd2",
+                        "tertiary-fixed": "#f8ddcf",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#c8c3e0",
+                        "surface": "#fcf8fa",
+                        "primary-container": "#e6e1ff",
+                        "on-tertiary-container": "#756156",
+                        "primary-fixed-dim": "#c8c3e0",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#002112",
+                        "secondary-container": "#c3ecd2",
+                        "on-tertiary-fixed": "#261810",
+                        "inverse-on-surface": "#f4f0f2",
+                        "surface-container-high": "#ebe7e9",
+                        "surface-dim": "#ddd9db"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-padding": "24px",
+                        "grid-gutter": "16px",
+                        "stack-gap-sm": "12px",
+                        "stack-gap-md": "20px",
+                        "stack-gap-lg": "32px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Outfit"],
+                        "label-md": ["Outfit"],
+                        "headline-md": ["Outfit"],
+                        "body-lg": ["Outfit"],
+                        "title-lg": ["Outfit"],
+                        "display-lg": ["Outfit"],
+                        "headline-lg-mobile": ["Outfit"],
+                        "body-md": ["Outfit"],
+                        "label-lg": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "label-md": ["11px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-lg": ["12px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        /* Smooth scrolling and basic reset */
+        html { scroll-behavior: smooth; }
+        body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        
+        /* Hide scrollbar for clean aesthetic */
+        ::-webkit-scrollbar { width: 0px; background: transparent; }
+        
+        /* Subtle float animation for avatar */
+        @keyframes subtle-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+        .animate-float { animation: subtle-float 6s ease-in-out infinite; }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen flex flex-col font-body-md antialiased selection:bg-primary-container selection:text-on-primary-container">
+<!-- TopAppBar -->
+<header class="fixed top-0 w-full z-50 bg-background/80 backdrop-blur-md transition-colors duration-200 flex items-center justify-between px-container-padding py-stack-gap-md md:hidden">
+<div class="flex items-center gap-4">
+<button class="text-on-surface-variant hover:bg-surface-variant/50 p-2 rounded-full flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile text-primary tracking-tight">PixelDay</h1>
+</div>
+<button class="text-on-surface-variant hover:bg-surface-variant/50 p-2 rounded-full flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<!-- Desktop Navigation (Hidden on Mobile) -->
+<header class="hidden md:flex fixed top-0 w-full z-50 bg-background/90 backdrop-blur-md transition-colors duration-200 items-center justify-between px-8 py-6 border-b border-surface-variant/30">
+<div class="flex items-center gap-12">
+<h1 class="font-headline-md text-headline-md text-primary tracking-tight">PixelDay</h1>
+<nav class="flex items-center gap-8">
+<a class="font-title-lg text-title-lg text-on-surface-variant hover:text-primary transition-colors" href="#">Hôm nay</a>
+<a class="font-title-lg text-title-lg text-on-surface-variant hover:text-primary transition-colors" href="#">Công việc</a>
+<a class="font-title-lg text-title-lg text-on-surface-variant hover:text-primary transition-colors" href="#">Lịch</a>
+<a class="font-title-lg text-title-lg text-on-surface-variant hover:text-primary transition-colors" href="#">Nhật ký</a>
+<a class="font-title-lg text-title-lg text-primary border-b-2 border-primary pb-1" href="#">Hồ sơ</a>
+</nav>
+</div>
+<button class="text-on-surface-variant hover:bg-surface-variant/50 p-3 rounded-full flex items-center justify-center transition-colors">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-grow pt-[104px] pb-[120px] md:pt-[120px] px-container-padding w-full max-w-4xl mx-auto flex flex-col gap-stack-gap-lg">
+<!-- Profile Header -->
+<section class="flex flex-col items-center justify-center text-center mt-4">
+<div class="relative mb-6 animate-float">
+<div class="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-surface-container-lowest shadow-sm">
+<img class="w-full h-full object-cover" data-alt="A bright, cheerful portrait photograph of a young Vietnamese professional in a minimalist setting. The lighting is soft and natural, emphasizing a positive, approachable mood. The background is a clean, pastel-toned surface, aligning with a modern, light-mode aesthetic. The subject is casually but neatly dressed, conveying a sense of daily wellness and organization." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9FUb5VrVTirEB8C4CByzALgrlX0KKXX0ttQ_Uw8sCDdfP3aX6WXeJP7l8yYAF6jQfVQHJqGTFt6H5uQeCeJ5GCQLPpKCXsoOZESWAW7ED_iOSlXEdSjzwzKYomgHDZaP1pcoaCYpxFQMiJOA1i1exdspx2LRuD906ExxCN08atum5XwG2QUY3DtUAm0vjQnCY_d--ZVQ1kK0i09G5_Mw5uFcBvAF6cl0bNAWuA3hD2ZULm9DsSZuCN_sx66fttDBB2IjFM5GRy8zO"/>
+</div>
+<div class="absolute bottom-0 right-2 bg-primary-container text-on-primary-container rounded-full p-2 border-2 border-surface-container-lowest shadow-sm">
+<span class="material-symbols-outlined text-[20px]" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+</div>
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface mb-2">Tùng Nguyễn</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-sm px-4 py-2 bg-surface-container-lowest rounded-full shadow-sm">
+                Sống tích cực mỗi ngày 🌱
+            </p>
+</section>
+<!-- Stats Bento Grid -->
+<section class="grid grid-cols-2 md:grid-cols-3 gap-grid-gutter">
+<!-- Main Stat -->
+<div class="col-span-2 md:col-span-1 bg-primary-container rounded-xl p-6 flex flex-col justify-between shadow-sm relative overflow-hidden group hover:bg-primary-fixed transition-colors duration-300">
+<div class="absolute -right-6 -top-6 w-32 h-32 bg-primary-fixed opacity-50 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+<span class="material-symbols-outlined text-on-primary-container mb-4 text-[32px]" style="font-variation-settings: 'FILL' 1;">task_alt</span>
+<div>
+<h3 class="font-display-lg text-display-lg text-on-primary-container mb-1">128</h3>
+<p class="font-title-lg text-title-lg text-on-primary-container/80 leading-tight">việc đã hoàn thành</p>
+</div>
+</div>
+<!-- Secondary Stats -->
+<div class="col-span-1 bg-secondary-container rounded-xl p-5 flex flex-col justify-between shadow-sm">
+<span class="material-symbols-outlined text-on-secondary-container mb-3" style="font-variation-settings: 'FILL' 1;">edit_calendar</span>
+<div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-secondary-container">18 <span class="font-title-lg text-title-lg">ngày</span></h3>
+<p class="font-body-md text-body-md text-on-secondary-container/80 mt-1">viết liên tiếp</p>
+</div>
+</div>
+<div class="col-span-1 bg-tertiary-container rounded-xl p-5 flex flex-col justify-between shadow-sm">
+<span class="material-symbols-outlined text-on-tertiary-container mb-3" style="font-variation-settings: 'FILL' 1;">photo_library</span>
+<div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-on-tertiary-container">56 <span class="font-title-lg text-title-lg">ảnh</span></h3>
+<p class="font-body-md text-body-md text-on-tertiary-container/80 mt-1">đã lưu</p>
+</div>
+</div>
+</section>
+<!-- Activity Heatmap -->
+<section class="flex flex-col gap-stack-gap-sm">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-title-lg text-title-lg text-on-surface">Hoạt động</h3>
+<button class="text-primary font-label-lg text-label-lg hover:underline px-2 py-1">Chi tiết</button>
+</div>
+<div class="bg-surface-container-lowest rounded-xl p-5 shadow-sm overflow-x-auto no-scrollbar">
+<div class="flex gap-2 min-w-max">
+<!-- Generating a decorative heatmap pattern -->
+<script>
+                        for(let col=0; col<16; col++) {
+                            document.write('<div class="flex flex-col gap-2">');
+                            for(let row=0; row<5; row++) {
+                                // Randomize intensity for visual effect
+                                const intensity = Math.random();
+                                let bgClass = 'bg-surface-container';
+                                if(intensity > 0.8) bgClass = 'bg-primary';
+                                else if(intensity > 0.5) bgClass = 'bg-primary-container';
+                                else if(intensity > 0.2) bgClass = 'bg-primary-fixed-dim';
+                                
+                                document.write(`<div class="w-4 h-4 rounded-unit ${bgClass} transition-transform hover:scale-125 cursor-pointer" title="Hoạt động"></div>`);
+                            }
+                            document.write('</div>');
+                        }
+                    </script>
+</div>
+<div class="flex justify-between mt-4 text-on-surface-variant font-label-md text-label-md px-1">
+<span>Tháng trước</span>
+<span>Hôm nay</span>
+</div>
+</div>
+</section>
+<!-- Diary History -->
+<section class="flex flex-col gap-stack-gap-sm">
+<h3 class="font-title-lg text-title-lg text-on-surface px-2">Nhật ký gần đây</h3>
+<div class="flex flex-col gap-3">
+<!-- Diary Item 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm flex gap-4 items-start group hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-lg p-3 min-w-[64px]">
+<span class="font-title-lg text-title-lg font-bold leading-none">24</span>
+<span class="font-label-md text-label-md uppercase mt-1">Th 10</span>
+</div>
+<div class="flex-grow pt-1">
+<h4 class="font-title-lg text-title-lg text-on-surface mb-1">Một ngày năng suất</h4>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Hôm nay hoàn thành xong project đúng hạn. Cảm giác rất nhẹ nhõm và tự hào. Buổi chiều có đi dạo công viên...</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/50 group-hover:text-primary self-center transition-colors">chevron_right</span>
+</div>
+<!-- Diary Item 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm flex gap-4 items-start group hover:bg-surface-container-low transition-colors cursor-pointer">
+<div class="flex flex-col items-center justify-center bg-surface-container text-on-surface-variant rounded-lg p-3 min-w-[64px]">
+<span class="font-title-lg text-title-lg font-bold leading-none">23</span>
+<span class="font-label-md text-label-md uppercase mt-1">Th 10</span>
+</div>
+<div class="flex-grow pt-1">
+<h4 class="font-title-lg text-title-lg text-on-surface mb-1">Cà phê cuối tuần</h4>
+<p class="font-body-md text-body-md text-on-surface-variant line-clamp-2">Gặp lại đám bạn cũ ở quán quen. Chuyện trò rôm rả quên cả thời gian. Thời tiết dạo này khá dễ chịu.</p>
+</div>
+<span class="material-symbols-outlined text-on-surface-variant/50 group-hover:text-primary self-center transition-colors">chevron_right</span>
+</div>
+</div>
+</section>
+<!-- Photo Gallery -->
+<section class="flex flex-col gap-stack-gap-sm mb-8">
+<div class="flex items-center justify-between px-2">
+<h3 class="font-title-lg text-title-lg text-on-surface">Thư viện ảnh</h3>
+<button class="text-primary font-label-lg text-label-lg hover:underline px-2 py-1">Xem tất cả</button>
+</div>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-grid-gutter">
+<div class="aspect-square rounded-xl overflow-hidden shadow-sm relative group cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A bright, high-key photograph of a cozy coffee shop table setup. A ceramic cup of latte art sits next to an open minimalist notebook and a sleek silver pen. The table is made of light natural wood. Sunlight streams in from a nearby window, casting soft shadows. The overall mood is calm, focused, and inspiring, fitting a modern daily journal theme." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7Uyi9EySBM8rAhVTb964BnEqHoCSwGceDWZrD3Qonzs6uivMMwsN50BDzox3J0mXQEmPjyE0sgWXbm-ovkfArWuYn1Hekuo8K9AxnODYGF8QPxz0Vj-YcL0TLmHy02zv9jNmE2t5cKw1ByT9HcQgd79vn-5NIET_Z_EnnLQoSr9CE8w2G8Q_tKI_LLlR-H-D1U-YPxZpHRLy1NL-cyug8cgegxbiQ5LnGQDjZFIoTmyORaO4MEg6Lizm7P6uiddrHs1jTX2uJKk3J"/>
+<div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+<span class="material-symbols-outlined text-white" style="font-variation-settings: 'FILL' 1;">favorite</span>
+</div>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden shadow-sm relative group cursor-pointer">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A serene landscape photograph taken during a gentle morning walk. Lush green trees line a quiet paved path in a city park. The sky is a soft, clear pastel blue. The lighting is diffused and airy, creating a sense of peace and mindfulness that aligns perfectly with a wellness and positivity tracker application." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAacvuKpvDgCENCNdJHPBjP-yV6reBnrNlmo7q50WBTUqkOX9L2mCV6MdTebIb9JrCXm4yCwzzaE8G1GP1YyEY_9P6NXNfLnoqBsYnItd19OnBnPikKSJA-rBVXve5jhNH5ehz-ZRRLiVUf6a4K0_wFp6uoVyCrIQLEn1Xy8gVBAj6OzZzARc2u1FpLRrJHgFQD8XP-LNru7k2ym6l9rxpn1B41__bUh6QcVHB-zjaI-J_SX5BAAQ909lMsKmXGrOoTIVY_Z9ckEhlR"/>
+<div class="absolute bottom-2 right-2 bg-surface-container-lowest/80 backdrop-blur-sm rounded px-2 py-1 font-label-md text-label-md text-on-surface">24/10</div>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden shadow-sm relative group cursor-pointer hidden md:block">
+<img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" data-alt="A close-up aesthetic shot of a healthy meal bowl. Features vibrant greens, quinoa, and avocado arranged neatly in a white ceramic bowl. The background is a clean, pastel marble surface. The lighting is bright and studio-like, emphasizing clean living and daily healthy habits in a modern minimalist style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCYJhVzPtrkGHp0E4KxPrvxaChGuvLagn23vIy3tuamNkJpjHIg2uQ26UlJCPj6vJuWTk2I9F-XTiKz9iICzseBrn_F0r79WpXKl70-9Rn1gBxM3RVGLiiAXzH3pl0wA_2A72F9ucuFH4PBvqRmnhTBMhX7M2tF4Gx-n5Hk1hHh5lthkJxMe4XPEKxZYhdTkTFIwddLnxMO2PImrcwcbvpOzZQSP2299fKVq5ciot1Y9i8kry0Id87K1igObJVNO74z4WAQlXCRB5cZ"/>
+</div>
+<div class="aspect-square rounded-xl overflow-hidden shadow-sm relative group cursor-pointer bg-surface-container flex items-center justify-center hover:bg-surface-variant transition-colors">
+<div class="flex flex-col items-center text-on-surface-variant">
+<span class="material-symbols-outlined text-[32px] mb-2">add_photo_alternate</span>
+<span class="font-label-lg text-label-lg">Thêm ảnh</span>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-lg bg-surface-container-low shadow-[0_-4px_20px_rgba(0,0,0,0.04)] md:hidden flex justify-around items-center pt-3 pb-6 px-4">
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/50 rounded-xl px-4 py-2 scale-95 active:scale-90 transition-all duration-150 group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">today</span>
+<span class="font-label-lg text-label-lg">Hôm nay</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/50 rounded-xl px-4 py-2 scale-95 active:scale-90 transition-all duration-150 group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">assignment</span>
+<span class="font-label-lg text-label-lg">Công việc</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/50 rounded-xl px-4 py-2 scale-95 active:scale-90 transition-all duration-150 group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">calendar_today</span>
+<span class="font-label-lg text-label-lg">Lịch</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/50 rounded-xl px-4 py-2 scale-95 active:scale-90 transition-all duration-150 group">
+<span class="material-symbols-outlined mb-1 group-hover:scale-110 transition-transform">auto_stories</span>
+<span class="font-label-lg text-label-lg">Nhật ký</span>
+</button>
+<!-- Active Tab: Hồ sơ -->
+<button class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-5 py-1 scale-95 active:scale-90 transition-all duration-150">
+<span class="material-symbols-outlined mb-1" style="font-variation-settings: 'FILL' 1;">person</span>
+<span class="font-label-lg text-label-lg">Hồ sơ</span>
+</button>
+</nav>
+</body></html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+
+<html lang="vi"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PixelDay - Lịch</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error-container": "#93000a",
+                        "surface-container": "#f1edef",
+                        "surface-container-lowest": "#ffffff",
+                        "inverse-surface": "#313032",
+                        "surface-variant": "#e5e1e4",
+                        "on-surface": "#1c1b1d",
+                        "primary": "#5e5c75",
+                        "on-secondary-fixed-variant": "#2a4e3a",
+                        "tertiary": "#6e5a50",
+                        "on-tertiary": "#ffffff",
+                        "on-error": "#ffffff",
+                        "on-background": "#1c1b1d",
+                        "on-tertiary-fixed-variant": "#554339",
+                        "outline": "#78767d",
+                        "tertiary-container": "#fadfd1",
+                        "on-primary-container": "#66637c",
+                        "error-container": "#ffdad6",
+                        "background": "#fcf8fa",
+                        "tertiary-fixed-dim": "#dbc1b4",
+                        "surface-tint": "#5e5c75",
+                        "on-secondary-container": "#486c57",
+                        "surface-bright": "#fcf8fa",
+                        "surface-container-low": "#f7f2f5",
+                        "on-primary-fixed-variant": "#46445c",
+                        "surface-container-highest": "#e5e1e4",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed": "#1b192e",
+                        "secondary": "#426651",
+                        "on-surface-variant": "#47464d",
+                        "outline-variant": "#c9c5cd",
+                        "primary-fixed": "#e4dffd",
+                        "secondary-fixed-dim": "#a8d0b6",
+                        "secondary-fixed": "#c3ecd2",
+                        "tertiary-fixed": "#f8ddcf",
+                        "error": "#ba1a1a",
+                        "inverse-primary": "#c8c3e0",
+                        "surface": "#fcf8fa",
+                        "primary-container": "#e6e1ff",
+                        "on-tertiary-container": "#756156",
+                        "primary-fixed-dim": "#c8c3e0",
+                        "on-secondary": "#ffffff",
+                        "on-secondary-fixed": "#002112",
+                        "secondary-container": "#c3ecd2",
+                        "on-tertiary-fixed": "#261810",
+                        "inverse-on-surface": "#f4f0f2",
+                        "surface-container-high": "#ebe7e9",
+                        "surface-dim": "#ddd9db"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-padding": "24px",
+                        "grid-gutter": "16px",
+                        "stack-gap-sm": "12px",
+                        "stack-gap-md": "20px",
+                        "stack-gap-lg": "32px",
+                        "unit": "4px"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Outfit"],
+                        "label-md": ["Outfit"],
+                        "headline-md": ["Outfit"],
+                        "body-lg": ["Outfit"],
+                        "title-lg": ["Outfit"],
+                        "display-lg": ["Outfit"],
+                        "headline-lg-mobile": ["Outfit"],
+                        "body-md": ["Outfit"],
+                        "label-lg": ["Outfit"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "label-md": ["11px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "body-lg": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "title-lg": ["20px", { "lineHeight": "28px", "fontWeight": "500" }],
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "600" }],
+                        "body-md": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-lg": ["12px", { "lineHeight": "16px", "letterSpacing": "0.5px", "fontWeight": "600" }]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Outfit', sans-serif; background-color: #fcf8fa; color: #1c1b1d; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .material-symbols-outlined.fill-1 { font-variation-settings: 'FILL' 1; }
+        
+        /* Soft Shadows */
+        .card-shadow { box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.04); }
+        .fab-shadow { box-shadow: 0px 8px 24px rgba(94, 92, 117, 0.15); }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-[80px] md:pb-0 md:pl-24">
+<!-- Desktop SideNav (Hidden on Mobile) -->
+<nav class="hidden md:flex flex-col items-center py-6 px-4 fixed left-0 top-0 h-full w-24 bg-surface-container-low border-r border-surface-variant/50 z-50">
+<div class="mb-12 font-headline-md text-headline-md text-primary font-bold">PD</div>
+<div class="flex flex-col gap-6 w-full items-center">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/50 w-16 h-16 rounded-full transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">today</span>
+<span class="font-label-md text-label-md mt-1">Hôm nay</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/50 w-16 h-16 rounded-full transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-label-md text-label-md mt-1">Công việc</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container w-16 h-16 rounded-full transition-colors duration-200" href="#">
+<span class="material-symbols-outlined fill-1">calendar_today</span>
+<span class="font-label-md text-label-md mt-1">Lịch</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/50 w-16 h-16 rounded-full transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-label-md text-label-md mt-1">Nhật ký</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/50 w-16 h-16 rounded-full transition-colors duration-200" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-md text-label-md mt-1">Hồ sơ</span>
+</a>
+</div>
+</nav>
+<!-- TopAppBar -->
+<header class="w-full top-0 bg-background dark:bg-background text-primary dark:text-primary-fixed font-headline-md text-headline-md-mobile flex items-center justify-between px-container-padding py-stack-gap-md z-40 sticky md:px-8">
+<button class="md:hidden text-on-surface-variant hover:bg-surface-variant/50 p-2 rounded-full transition-colors duration-200">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="font-headline-lg-mobile text-headline-lg-mobile text-primary font-bold tracking-tight">PixelDay</div>
+<button class="text-on-surface-variant hover:bg-surface-variant/50 p-2 rounded-full transition-colors duration-200">
+<span class="material-symbols-outlined">settings</span>
+</button>
+</header>
+<!-- Main Content Canvas -->
+<main class="px-container-padding md:px-8 max-w-[1280px] mx-auto py-stack-gap-md space-y-stack-gap-lg">
+<!-- Header -->
+<div class="flex items-center justify-between">
+<h1 class="font-display-lg text-display-lg text-on-background">Tháng 10</h1>
+<div class="flex gap-2">
+<button class="p-2 rounded-full bg-surface-container hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="p-2 rounded-full bg-surface-container hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-grid-gutter items-start">
+<!-- Calendar View (Left/Main Column) -->
+<div class="lg:col-span-7 bg-surface-container-lowest rounded-xl p-6 card-shadow">
+<!-- Days of week -->
+<div class="grid grid-cols-7 gap-2 mb-4 text-center font-label-lg text-label-lg text-on-surface-variant uppercase">
+<div>T2</div><div>T3</div><div>T4</div><div>T5</div><div>T6</div><div>T7</div><div>CN</div>
+</div>
+<!-- Calendar Grid -->
+<div class="grid grid-cols-7 gap-y-4 gap-x-2 text-center font-body-lg text-body-lg">
+<!-- Week 1 -->
+<div class="text-outline-variant p-2">30</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">
+                        1
+                        <div class="absolute bottom-1 w-1 h-1 bg-primary rounded-full"></div>
+</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">2</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">3</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">4</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">5</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto text-error">6</div>
+<!-- Week 2 -->
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">7</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">
+                        8
+                        <div class="absolute bottom-1 w-1 h-1 bg-secondary rounded-full"></div>
+</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">9</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">10</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">11</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">
+                        12
+                        <div class="absolute bottom-1 w-1 h-1 bg-tertiary rounded-full"></div>
+</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto text-error">13</div>
+<!-- Week 3 (Current Day) -->
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">14</div>
+<div class="p-2 rounded-full bg-primary text-on-primary font-bold shadow-md cursor-pointer relative flex justify-center items-center h-10 w-10 mx-auto">
+                        15
+                        <div class="absolute bottom-1 w-1 h-1 bg-on-primary rounded-full"></div>
+</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">16</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">17</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">18</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">19</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto text-error">
+                        20
+                        <div class="absolute bottom-1 w-1 h-1 bg-error rounded-full"></div>
+</div>
+<!-- Week 4 -->
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">21</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">22</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">23</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">24</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">25</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">26</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto text-error">27</div>
+<!-- Week 5 -->
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">28</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">29</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">30</div>
+<div class="p-2 rounded-full hover:bg-surface-container cursor-pointer transition-colors relative flex justify-center items-center h-10 w-10 mx-auto">31</div>
+<div class="text-outline-variant p-2">1</div>
+<div class="text-outline-variant p-2">2</div>
+<div class="text-outline-variant p-2">3</div>
+</div>
+<!-- Event Details for Selected Day -->
+<div class="mt-8 pt-6 border-t border-surface-variant">
+<h3 class="font-title-lg text-title-lg text-on-surface mb-4">Sự kiện ngày 15 Thg 10</h3>
+<div class="flex gap-4 p-4 rounded-lg bg-primary-container/30 border border-primary-fixed/50 hover:bg-primary-container/50 transition-colors cursor-pointer mb-3">
+<div class="flex flex-col items-center justify-center text-primary w-12 shrink-0">
+<span class="font-title-lg text-title-lg font-bold">10</span>
+<span class="font-label-md text-label-md">00</span>
+</div>
+<div class="w-1 bg-primary rounded-full"></div>
+<div class="flex-1">
+<h4 class="font-title-lg text-title-lg text-on-surface font-semibold">Họp dự án UI/UX</h4>
+<div class="flex items-center text-on-surface-variant mt-1 gap-1">
+<span class="material-symbols-outlined text-[16px]">location_on</span>
+<span class="font-body-md text-body-md">Tòa nhà ABC</span>
+</div>
+<div class="flex items-center text-on-surface-variant mt-1 gap-1">
+<span class="material-symbols-outlined text-[16px]">autorenew</span>
+<span class="font-body-md text-body-md">Hằng tuần</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Event Creation Form (Right Column) -->
+<div class="lg:col-span-5 bg-surface-container-lowest rounded-xl p-6 card-shadow flex flex-col h-full relative overflow-hidden">
+<!-- Subtle Decorative Background -->
+<div class="absolute -top-24 -right-24 w-64 h-64 bg-primary-container rounded-full blur-3xl opacity-30 pointer-events-none"></div>
+<div class="flex items-center justify-between mb-6 z-10">
+<h2 class="font-headline-md text-headline-md text-on-surface">Tạo sự kiện mới</h2>
+<span class="material-symbols-outlined text-primary text-3xl">edit_calendar</span>
+</div>
+<form class="space-y-4 z-10 flex-1">
+<!-- Title -->
+<div>
+<label class="block font-label-lg text-label-lg text-on-surface-variant mb-1 ml-4">Tiêu đề</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-full px-5 py-3 font-body-lg text-body-lg text-on-surface transition-all outline-none" placeholder="Thêm tiêu đề" type="text"/>
+</div>
+<!-- Time & Date -->
+<div class="grid grid-cols-2 gap-4">
+<div>
+<label class="block font-label-lg text-label-lg text-on-surface-variant mb-1 ml-4">Bắt đầu</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-full px-5 py-3 font-body-lg text-body-lg text-on-surface transition-all outline-none" type="time" value="10:00"/>
+</div>
+</div>
+<div>
+<label class="block font-label-lg text-label-lg text-on-surface-variant mb-1 ml-4">Kết thúc</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-full px-5 py-3 font-body-lg text-body-lg text-on-surface transition-all outline-none" type="time" value="11:00"/>
+</div>
+</div>
+</div>
+<!-- Location -->
+<div>
+<label class="block font-label-lg text-label-lg text-on-surface-variant mb-1 ml-4">Địa chỉ</label>
+<div class="relative flex items-center">
+<span class="material-symbols-outlined absolute left-4 text-on-surface-variant">location_on</span>
+<input class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-full pl-12 pr-5 py-3 font-body-lg text-body-lg text-on-surface transition-all outline-none" placeholder="Tòa nhà ABC" type="text"/>
+</div>
+<button class="mt-2 text-primary font-label-lg text-label-lg flex items-center gap-1 hover:underline ml-4" type="button">
+<span class="material-symbols-outlined text-[16px]">map</span>
+                            Xem trên bản đồ
+                        </button>
+</div>
+<!-- Repeat -->
+<div>
+<label class="block font-label-lg text-label-lg text-on-surface-variant mb-1 ml-4">Lặp lại</label>
+<select class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-full px-5 py-3 font-body-lg text-body-lg text-on-surface appearance-none outline-none cursor-pointer">
+<option>Không</option>
+<option>Hằng ngày</option>
+<option selected="">Hằng tuần</option>
+<option>Hằng tháng</option>
+</select>
+</div>
+<!-- Description -->
+<div>
+<label class="block font-label-lg text-label-lg text-on-surface-variant mb-1 ml-4">Mô tả</label>
+<textarea class="w-full bg-surface-container-lowest border border-outline-variant focus:border-primary focus:ring-1 focus:ring-primary rounded-2xl px-5 py-3 font-body-lg text-body-lg text-on-surface transition-all outline-none resize-none" placeholder="Chi tiết sự kiện..." rows="3"></textarea>
+</div>
+</form>
+<div class="mt-6 pt-4 border-t border-surface-variant z-10">
+<button class="w-full bg-primary-container text-on-primary-container hover:bg-primary-container/80 hover:shadow-md transition-all duration-200 font-label-lg text-label-lg py-4 rounded-full flex items-center justify-center gap-2">
+<span class="material-symbols-outlined">save</span>
+                        Lưu Sự Kiện
+                    </button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="fixed bottom-0 w-full z-50 rounded-t-lg bg-surface-container-low dark:bg-surface-container-low text-primary dark:text-primary-fixed font-label-lg text-label-lg shadow-sm flex justify-around items-center pt-3 pb-6 px-4 md:hidden border-t border-surface-variant/20">
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant scale-95 active:scale-90 transition-transform duration-150 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined">today</span>
+<span class="mt-1">Hôm nay</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant scale-95 active:scale-90 transition-transform duration-150 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="mt-1">Công việc</span>
+</a>
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container rounded-full px-5 py-1 scale-95 active:scale-90 transition-transform duration-150" href="#">
+<span class="material-symbols-outlined fill-1">calendar_today</span>
+<span class="mt-1 font-bold">Lịch</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant scale-95 active:scale-90 transition-transform duration-150 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="mt-1">Nhật ký</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant scale-95 active:scale-90 transition-transform duration-150 p-2 rounded-xl" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="mt-1">Hồ sơ</span>
+</a>
+</nav>
+<!-- Floating Action Button (Mobile) -->
+<button class="md:hidden fixed bottom-28 right-6 bg-primary-container text-on-primary-container w-14 h-14 rounded-2xl flex items-center justify-center fab-shadow hover:scale-105 active:scale-95 transition-transform z-40">
+<span class="material-symbols-outlined text-3xl">add</span>
+</button>
+</body></html>
