@@ -1,5 +1,6 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Image } from 'expo-image';
+import { launchImageLibraryAsync } from 'expo-image-picker';
 import { useEffect, useMemo, useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
@@ -89,15 +90,7 @@ export default function DiaryScreen() {
   }
 
   async function pickPhotos() {
-    const ImagePicker = await import('expo-image-picker');
-    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-    if (!permission.granted) {
-      setSuccessMessage('Cần quyền truy cập thư viện ảnh.');
-      return;
-    }
-
-    let result = await ImagePicker.launchImageLibraryAsync({
+    let result = await launchImageLibraryAsync({
       allowsMultipleSelection: true,
       mediaTypes: ['images'],
       orderedSelection: true,
@@ -106,7 +99,7 @@ export default function DiaryScreen() {
     }).catch(() => null);
 
     if (!result) {
-      result = await ImagePicker.launchImageLibraryAsync({
+      result = await launchImageLibraryAsync({
         allowsMultipleSelection: false,
         mediaTypes: ['images'],
         quality: 0.85,

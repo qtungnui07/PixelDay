@@ -1,6 +1,16 @@
 import type { PropsWithChildren, ReactNode } from 'react';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import Animated, {
+  Easing,
+  interpolate,
+  useAnimatedStyle,
+  useSharedValue,
+  withRepeat,
+  withTiming,
+} from 'react-native-reanimated';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { theme } from '@/constants/theme';
@@ -11,9 +21,63 @@ type ScreenProps = PropsWithChildren<{
   rightContent?: ReactNode;
 }>;
 
+const AnimatedLinearGradient = Animated.createAnimatedComponent(LinearGradient);
+
 export function PixelScreen({ title, subtitle, rightContent, children }: ScreenProps) {
+  const gradientProgress = useSharedValue(0);
+
+  useEffect(() => {
+    gradientProgress.value = withRepeat(
+      withTiming(1, {
+        duration: 9000,
+        easing: Easing.inOut(Easing.sin),
+      }),
+      -1,
+      true
+    );
+  }, [gradientProgress]);
+
+  const firstGradientStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(gradientProgress.value, [0, 0.5, 1], [0.86, 0.46, 0.86]),
+    transform: [
+      { translateX: interpolate(gradientProgress.value, [0, 1], [-34, 28]) },
+      { translateY: interpolate(gradientProgress.value, [0, 1], [-22, 24]) },
+      { scale: interpolate(gradientProgress.value, [0, 1], [1.06, 1.12]) },
+    ],
+  }));
+
+  const secondGradientStyle = useAnimatedStyle(() => ({
+    opacity: interpolate(gradientProgress.value, [0, 0.5, 1], [0.34, 0.82, 0.34]),
+    transform: [
+      { translateX: interpolate(gradientProgress.value, [0, 1], [32, -28]) },
+      { translateY: interpolate(gradientProgress.value, [0, 1], [28, -20]) },
+      { scale: interpolate(gradientProgress.value, [0, 1], [1.12, 1.06]) },
+    ],
+  }));
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
+      <View pointerEvents="none" style={styles.gradientLayer}>
+        <LinearGradient
+          colors={['#FFF0E7', '#F0EAFF', '#E7F8EF', '#EEF4FF']}
+          end={{ x: 1, y: 1 }}
+          locations={[0, 0.38, 0.72, 1]}
+          start={{ x: 0, y: 0 }}
+          style={styles.gradientFill}
+        />
+        <AnimatedLinearGradient
+          colors={['rgba(230, 225, 255, 0.95)', 'rgba(255, 232, 215, 0.18)', 'rgba(195, 236, 210, 0.78)']}
+          end={{ x: 1, y: 1 }}
+          start={{ x: 0, y: 0 }}
+          style={[styles.animatedGradientFill, firstGradientStyle]}
+        />
+        <AnimatedLinearGradient
+          colors={['rgba(255, 226, 207, 0.82)', 'rgba(246, 241, 255, 0.22)', 'rgba(232, 244, 255, 0.9)']}
+          end={{ x: 0, y: 1 }}
+          start={{ x: 1, y: 0 }}
+          style={[styles.animatedGradientFill, secondGradientStyle]}
+        />
+      </View>
       <ScrollView contentContainerStyle={styles.content} showsVerticalScrollIndicator={false}>
         <View style={styles.topBar}>
           <View style={styles.iconButton}>
@@ -56,6 +120,21 @@ const styles = StyleSheet.create({
   safeArea: {
     flex: 1,
     backgroundColor: theme.colors.background,
+  },
+  gradientLayer: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: theme.colors.background,
+    overflow: 'hidden',
+  },
+  gradientFill: {
+    ...StyleSheet.absoluteFillObject,
+  },
+  animatedGradientFill: {
+    bottom: -40,
+    left: -40,
+    position: 'absolute',
+    right: -40,
+    top: -40,
   },
   content: {
     gap: theme.spacing.lg,
