@@ -1,7 +1,6 @@
 import type { ComponentProps, PropsWithChildren, ReactNode } from 'react';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { LinearGradient } from 'expo-linear-gradient';
-import { router } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Animated, {
@@ -16,6 +15,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { usePixelTheme } from '@/components/PixelTheme';
 import { theme } from '@/constants/theme';
+import { api, apiBaseUrl } from '@/lib/api';
+import { useAuth } from '@/lib/auth';
 
 type ScreenProps = PropsWithChildren<{
   title: string;
@@ -32,28 +33,38 @@ const themeOptions = [
   { name: 'nord' as const, label: 'Nord', colors: ['#2E3440', '#4C566A', '#88C0D0', '#A3BE8C'] },
 ];
 
-const quickActions: { label: string; meta: string; icon: IconName }[] = [
-  { label: 'Hôm nay', meta: '4 việc, 2 sự kiện', icon: 'view-dashboard-outline' },
-  { label: 'Tìm kiếm nhanh', meta: 'Task, lịch, nhật ký', icon: 'magnify' },
-  { label: 'Đồng bộ dữ liệu', meta: 'Sẵn sàng khi API bật', icon: 'cloud-sync-outline' },
-  { label: 'Server status', meta: 'API, database, sync', icon: 'heart-pulse' },
-];
-
-const healthRows = [
-  { label: 'App shell', value: 'OK', tone: 'good' as const },
-  { label: 'API', value: 'Chưa cấu hình', tone: 'warn' as const },
-  { label: 'Database', value: 'Chờ server', tone: 'warn' as const },
-  { label: 'Last sync', value: 'Local only', tone: 'neutral' as const },
-];
-
 export function PixelScreen({ title, subtitle, rightContent, children }: ScreenProps) {
   const { theme: activeTheme, themeName, setThemeName } = usePixelTheme();
+  const { logout, token } = useAuth();
   const [activeSheet, setActiveSheet] = useState<'menu' | 'settings' | null>(null);
   const [lastHealthCheck, setLastHealthCheck] = useState('Chưa check');
+  const [serverStatus, setServerStatus] = useState<'good' | 'warn'>('warn');
+  const [databaseStatus, setDatabaseStatus] = useState<'good' | 'warn'>('warn');
+  const [summary, setSummary] = useState({ todayOpenTasks: 0, todayEvents: 0 });
   const gradientProgress = useSharedValue(0);
   const healthStatusRows = [
-    ...healthRows.slice(0, 3),
+    { label: 'App shell', value: 'OK', tone: 'good' as const },
+    { label: 'API', value: serverStatus === 'good' ? 'Online' : 'Chưa kết nối', tone: serverStatus },
+    { label: 'Database', value: databaseStatus === 'good' ? 'Online' : 'Chờ server', tone: databaseStatus },
     { label: 'Last check', value: lastHealthCheck, tone: 'neutral' as const },
+  ];
+  const quickActions: { label: string; meta: string; icon: IconName }[] = [
+    {
+      label: 'Hôm nay',
+      meta: `${summary.todayOpenTasks} việc, ${summary.todayEvents} sự kiện`,
+      icon: 'view-dashboard-outline',
+    },
+    { label: 'Tìm kiếm nhanh', meta: 'Task, lịch, nhật ký', icon: 'magnify' },
+    {
+      label: 'Đồng bộ dữ liệu',
+      meta: token ? 'Đang dùng server PixelDay' : 'Cần đăng nhập',
+      icon: 'cloud-sync-outline',
+    },
+    {
+      label: 'Server status',
+      meta: `${apiBaseUrl}`,
+      icon: 'heart-pulse',
+    },
   ];
 
   useEffect(() => {
@@ -66,6 +77,51 @@ export function PixelScreen({ title, subtitle, rightContent, children }: ScreenP
       true
     );
   }, [gradientProgress]);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadShellData() {
+      try {
+        const health = await api.health();
+
+        if (ignore) {
+          return;
+        }
+
+        setServerStatus('good');
+        setDatabaseStatus(health.database === 'ok' ? 'good' : 'warn');
+        setLastHealthCheck(
+          `OK ${health.latencyMs}ms · ${new Date().toLocaleTimeString('vi-VN', {
+            hour: '2-digit',
+            minute: '2-digit',
+          })}`
+        );
+
+        if (token) {
+          const profileSummary = await api.profileSummary(token);
+
+          if (!ignore) {
+            setSummary({
+              todayOpenTasks: profileSummary.stats.todayOpenTasks,
+              todayEvents: profileSummary.stats.todayEvents,
+            });
+          }
+        }
+      } catch {
+        if (!ignore) {
+          setServerStatus('warn');
+          setDatabaseStatus('warn');
+        }
+      }
+    }
+
+    loadShellData();
+
+    return () => {
+      ignore = true;
+    };
+  }, [token]);
 
   const firstGradientStyle = useAnimatedStyle(() => ({
     opacity: interpolate(gradientProgress.value, [0, 0.5, 1], [0.86, 0.46, 0.86]),
@@ -213,7 +269,27 @@ export function PixelScreen({ title, subtitle, rightContent, children }: ScreenP
 
                 <Pressable
                   style={[styles.checkButton, { borderColor: activeTheme.colors.border }]}
-                  onPress={() => setLastHealthCheck(new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }))}>
+                  onPress={() => {
+                    api
+                      .health()
+                      .then((health) =>
+                        {
+                          setServerStatus('good');
+                          setDatabaseStatus(health.database === 'ok' ? 'good' : 'warn');
+                          setLastHealthCheck(
+                            `OK ${health.latencyMs}ms · ${new Date().toLocaleTimeString('vi-VN', {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}`
+                          );
+                        }
+                      )
+                      .catch(() => {
+                        setServerStatus('warn');
+                        setDatabaseStatus('warn');
+                        setLastHealthCheck(`Fail · ${apiBaseUrl}`);
+                      });
+                  }}>
                   <MaterialCommunityIcons color={activeTheme.colors.primary} name="refresh" size={20} />
                   <Text style={[styles.checkText, { color: activeTheme.colors.primary }]}>Check health</Text>
                 </Pressable>
@@ -222,7 +298,7 @@ export function PixelScreen({ title, subtitle, rightContent, children }: ScreenP
                   style={[styles.logoutButton, { backgroundColor: activeTheme.colors.errorContainer }]}
                   onPress={() => {
                     setActiveSheet(null);
-                    router.replace('/login');
+                    logout();
                   }}>
                   <MaterialCommunityIcons color={activeTheme.colors.danger} name="logout" size={21} />
                   <Text style={[styles.logoutText, { color: activeTheme.colors.danger }]}>Log out</Text>
@@ -231,19 +307,21 @@ export function PixelScreen({ title, subtitle, rightContent, children }: ScreenP
             ) : (
               <>
                 <View style={styles.sheetHeader}>
-                  <Text style={[styles.sheetTitle, { color: activeTheme.colors.text }]}>Daily cockpit</Text>
+                  <Text style={[styles.sheetTitle, { color: activeTheme.colors.text }]}>Đồng bộ hôm nay</Text>
                   <Pressable style={styles.smallIconButton} onPress={() => setActiveSheet(null)}>
                     <MaterialCommunityIcons color={activeTheme.colors.muted} name="close" size={22} />
                   </Pressable>
                 </View>
                 <View style={[styles.cockpitCard, { backgroundColor: activeTheme.colors.primaryContainer }]}>
-                  <Text style={[styles.cockpitValue, { color: activeTheme.colors.onPrimaryContainer }]}>6</Text>
+                  <Text style={[styles.cockpitValue, { color: activeTheme.colors.onPrimaryContainer }]}>
+                    {summary.todayOpenTasks + summary.todayEvents}
+                  </Text>
                   <View style={styles.cockpitCopy}>
                     <Text style={[styles.cockpitTitle, { color: activeTheme.colors.onPrimaryContainer }]}>
-                      Việc cần chú ý hôm nay
+                      Dữ liệu đang đồng bộ
                     </Text>
                     <Text style={[styles.cockpitMeta, { color: activeTheme.colors.onPrimaryContainer }]}>
-                      4 task còn mở, 2 sự kiện gần nhất
+                      {summary.todayOpenTasks} task còn mở, {summary.todayEvents} sự kiện hôm nay
                     </Text>
                   </View>
                 </View>

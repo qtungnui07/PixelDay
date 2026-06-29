@@ -1,9 +1,11 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import type { ComponentProps } from 'react';
 import { Tabs } from 'expo-router';
+import { ActivityIndicator, View } from 'react-native';
 
 import { HapticTab } from '@/components/haptic-tab';
 import { usePixelTheme } from '@/components/PixelTheme';
+import { useAuth } from '@/lib/auth';
 
 type IconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
 
@@ -17,6 +19,15 @@ const tabs: Record<string, { title: string; icon: IconName; activeIcon: IconName
 
 export default function TabLayout() {
   const { theme: activeTheme } = usePixelTheme();
+  const { isReady } = useAuth();
+
+  if (!isReady) {
+    return (
+      <View style={{ alignItems: 'center', backgroundColor: activeTheme.colors.background, flex: 1, justifyContent: 'center' }}>
+        <ActivityIndicator color={activeTheme.colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <Tabs

@@ -1,29 +1,86 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
 import { Card, Pill, PixelScreen } from '@/components/PixelLayout';
 import { theme } from '@/constants/theme';
+import { api, type ProfileSummary } from '@/lib/api';
+import { useAuth } from '@/lib/auth';
 
-const stats = [
-  { label: 'Việc xong', value: '18', tone: theme.colors.primary },
-  { label: 'Sự kiện', value: '7', tone: '#2F9C62' },
-  { label: 'Nhật ký', value: '12', tone: '#B56D20' },
-];
+type ProfileStats = {
+  doneTasks: number;
+  events: number;
+  diaryCount: number;
+};
+
+function getInitials(displayName: string) {
+  return displayName
+    .split(' ')
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase();
+}
 
 export default function ProfileScreen() {
+  const { logout, token, user } = useAuth();
+  const [stats, setStats] = useState<ProfileStats>({ doneTasks: 0, events: 0, diaryCount: 0 });
+  const [heatmap, setHeatmap] = useState<ProfileSummary['heatmap']>([]);
+  const [syncMessage, setSyncMessage] = useState('Đang đồng bộ server...');
+  const displayName = user?.displayName ?? 'PixelDay';
+  const email = user?.email ?? 'Chưa đăng nhập';
+
+  useEffect(() => {
+    async function loadStats() {
+      if (!token) {
+        return;
+      }
+
+      const summary = await api.profileSummary(token);
+
+      setStats({
+        doneTasks: summary.stats.doneTasks,
+        events: summary.stats.events,
+        diaryCount: summary.stats.diaryCount,
+      });
+      setHeatmap(summary.heatmap);
+      setSyncMessage('Dữ liệu đã đồng bộ với server PixelDay.');
+    }
+
+    loadStats().catch(() => setSyncMessage('Chưa kết nối được server, kéo để thử lại sau.'));
+  }, [token]);
+
+  const heatmapByDate = new Map(heatmap.map((item) => [item.dateKey, item.count]));
+  const today = new Date();
+  const heatmapDays = Array.from({ length: 35 }, (_, index) => {
+    const date = new Date(today);
+    date.setDate(today.getDate() - (34 - index));
+    const dateKey = `${date.getFullYear()}-${`${date.getMonth() + 1}`.padStart(2, '0')}-${`${date.getDate()}`.padStart(2, '0')}`;
+
+    return {
+      dateKey,
+      count: heatmapByDate.get(dateKey) ?? 0,
+    };
+  });
+
   return (
-    <PixelScreen title="Hồ sơ" subtitle="Không có auth thật, chỉ là giao diện mẫu.">
+    <PixelScreen title="Hồ sơ" subtitle={syncMessage}>
       <Card style={styles.profileCard}>
         <View style={styles.avatar}>
-          <Text style={styles.avatarText}>AN</Text>
+          <Text style={styles.avatarText}>{getInitials(displayName) || 'PD'}</Text>
         </View>
-        <Text style={styles.name}>An Nhiên</Text>
-        <Text style={styles.email}>an.nhien@pixelday.app</Text>
-        <Pill tone="mint">MVP preview</Pill>
+        <Text style={styles.name}>{displayName}</Text>
+        <Text style={styles.email}>{email}</Text>
+        <Pill tone="mint">Server sync</Pill>
       </Card>
 
       <View style={styles.statsGrid}>
-        {stats.map((item) => (
+        {[
+          { label: 'Việc xong', value: `${stats.doneTasks}`, tone: theme.colors.primary },
+          { label: 'Sự kiện', value: `${stats.events}`, tone: '#2F9C62' },
+          { label: 'Nhật ký', value: `${stats.diaryCount}`, tone: '#B56D20' },
+        ].map((item) => (
           <Card key={item.label} style={styles.statCard}>
             <Text style={[styles.statValue, { color: item.tone }]}>{item.value}</Text>
             <Text style={styles.statLabel}>{item.label}</Text>
@@ -34,16 +91,16 @@ export default function ProfileScreen() {
       <Card style={styles.activityCard}>
         <View style={styles.activityHeader}>
           <Text style={styles.sectionTitle}>Hoạt động</Text>
-          <Text style={styles.detailLink}>Chi tiết</Text>
+          <Text style={styles.detailLink}>30 ngày</Text>
         </View>
         <View style={styles.heatmap}>
-          {Array.from({ length: 35 }).map((_, index) => (
+          {heatmapDays.map((item) => (
             <View
-              key={index}
+              key={item.dateKey}
               style={[
                 styles.heatCell,
-                index % 3 === 0 && styles.heatMid,
-                index % 5 === 0 && styles.heatStrong,
+                item.count > 0 && styles.heatMid,
+                item.count > 1 && styles.heatStrong,
               ]}
             />
           ))}
@@ -55,18 +112,25 @@ export default function ProfileScreen() {
       </Card>
 
       <Card style={styles.settingsCard}>
-        <Text style={styles.sectionTitle}>Cài đặt mẫu</Text>
-        {['Thông báo dịu nhẹ', 'Đồng bộ lịch sau này', 'Sao lưu nhật ký sau này'].map((item) => (
-          <View key={item} style={styles.settingRow}>
-            <MaterialCommunityIcons color={theme.colors.primary} name="auto-fix" size={22} />
-            <Text style={styles.settingText}>{item}</Text>
-            <MaterialCommunityIcons color={theme.colors.muted} name="chevron-right" size={22} />
+        <Text style={styles.sectionTitle}>Tài khoản</Text>
+        {[
+          { label: 'Email đăng nhập', value: email, icon: 'email-outline' as const },
+          { label: 'Đồng bộ lịch', value: 'Chờ Google OAuth', icon: 'calendar-sync-outline' as const },
+          { label: 'Ảnh nhật ký', value: 'Lưu trên server PixelDay', icon: 'image-multiple-outline' as const },
+        ].map((item) => (
+          <View key={item.label} style={styles.settingRow}>
+            <MaterialCommunityIcons color={theme.colors.primary} name={item.icon} size={22} />
+            <View style={styles.settingCopy}>
+              <Text style={styles.settingText}>{item.label}</Text>
+              <Text style={styles.settingValue}>{item.value}</Text>
+            </View>
           </View>
         ))}
       </Card>
 
-      <Pressable style={styles.logoutButton}>
-        <Text style={styles.logoutText}>Đăng xuất mẫu</Text>
+      <Pressable style={styles.logoutButton} onPress={logout}>
+        <MaterialCommunityIcons color={theme.colors.danger} name="logout" size={21} />
+        <Text style={styles.logoutText}>Đăng xuất</Text>
       </Pressable>
     </PixelScreen>
   );
@@ -85,6 +149,7 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     height: 86,
     justifyContent: 'center',
+    overflow: 'hidden',
     width: 86,
   },
   avatarText: {
@@ -171,16 +236,27 @@ const styles = StyleSheet.create({
     gap: theme.spacing.sm,
     paddingVertical: theme.spacing.sm,
   },
+  settingCopy: {
+    flex: 1,
+    gap: 2,
+  },
   settingText: {
     color: theme.colors.text,
-    flex: 1,
     fontSize: 15,
     fontWeight: '800',
+  },
+  settingValue: {
+    color: theme.colors.muted,
+    fontSize: 13,
+    fontWeight: '700',
   },
   logoutButton: {
     alignItems: 'center',
     backgroundColor: theme.colors.peachSoft,
     borderRadius: theme.radius.pill,
+    flexDirection: 'row',
+    gap: theme.spacing.sm,
+    justifyContent: 'center',
     paddingVertical: 15,
   },
   logoutText: {

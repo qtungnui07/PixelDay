@@ -1,0 +1,49 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: pixelday
+      POSTGRES_USER: pixelday
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-pixelday_dev_password}
+    volumes:
+      - pixelday-postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U pixelday -d pixelday"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  api:
+    build:
+      context: ./server
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      PORT: 8787
+      HOST: 0.0.0.0
+      DATABASE_URL: postgres://pixelday:${POSTGRES_PASSWORD:-pixelday_dev_password}@postgres:5432/pixelday
+      CORS_ORIGIN: ${CORS_ORIGIN:-*}
+      PUBLIC_BASE_URL: ${PUBLIC_BASE_URL:-https://api-platform.qtitpc.dev}
+      DATA_DIR: /data
+      PERSONAL_USER_EMAIL: ${PERSONAL_USER_EMAIL:-me@pixelday.local}
+      PERSONAL_USER_NAME: ${PERSONAL_USER_NAME:-PixelDay}
+    volumes:
+      - ./server-data:/data
+    ports:
+      - "127.0.0.1:8787:8787"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        EXPO_PUBLIC_API_URL: ${EXPO_PUBLIC_API_URL:-https://api-platform.qtitpc.dev}
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8088:80"
+
+volumes:
+  pixelday-postgres:

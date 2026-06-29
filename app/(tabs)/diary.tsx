@@ -6,6 +6,8 @@ import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Card, PixelScreen } from '@/components/PixelLayout';
 import { theme } from '@/constants/theme';
+import { api } from '@/lib/api';
+import { useAuth } from '@/lib/auth';
 
 const MAX_DIARY_LENGTH = 1000;
 
@@ -23,12 +25,8 @@ function formatDiaryDate(dateKey: string) {
   return `${day}/${month}`;
 }
 
-async function getDiaryStorage() {
-  const storageModule = await import('@react-native-async-storage/async-storage');
-  return storageModule.default;
-}
-
 export default function DiaryScreen() {
+  const { token } = useAuth();
   const diaryDateKey = useMemo(() => getTodayKey(), []);
   const [content, setContent] = useState('');
   const [photoUris, setPhotoUris] = useState<string[]>([]);
@@ -37,18 +35,16 @@ export default function DiaryScreen() {
 
   useEffect(() => {
     async function loadDiary() {
+      if (!token) {
+        return;
+      }
+
       try {
-        const storage = await getDiaryStorage();
-        const savedContent = await storage.getItem(`pixelday.diary.${diaryDateKey}`);
+        const result = await api.diary(token, diaryDateKey);
 
-        if (savedContent) {
-          setContent(savedContent);
-        }
-
-        const savedPhotos = await storage.getItem(`pixelday.diary.photos.${diaryDateKey}`);
-
-        if (savedPhotos) {
-          setPhotoUris(JSON.parse(savedPhotos) as string[]);
+        if (result.entry) {
+          setContent(result.entry.content);
+          setPhotoUris(result.entry.photoUris);
         }
       } catch {
         setContent('');
@@ -57,7 +53,7 @@ export default function DiaryScreen() {
     }
 
     loadDiary();
-  }, [diaryDateKey]);
+  }, [diaryDateKey, token]);
 
   function updateContent(nextContent: string) {
     setContent(nextContent.slice(0, MAX_DIARY_LENGTH));
@@ -68,25 +64,22 @@ export default function DiaryScreen() {
     setIsSaving(true);
 
     try {
-      const storage = await getDiaryStorage();
-      await storage.setItem(`pixelday.diary.${diaryDateKey}`, content);
+      if (!token) {
+        throw new Error('Bạn cần đăng nhập lại.');
+      }
+
+      const result = await api.saveDiary(token, diaryDateKey, { content, photoUris });
+      setPhotoUris(result.entry.photoUris);
       setSuccessMessage('Đã lưu nhật ký hôm nay.');
-    } catch {
-      setSuccessMessage('Chưa lưu được, thử lại sau.');
+    } catch (error) {
+      setSuccessMessage(error instanceof Error ? error.message : 'Chưa lưu được, thử lại sau.');
     } finally {
       setIsSaving(false);
     }
   }
 
-  async function savePhotoUris(nextPhotoUris: string[]) {
+  function savePhotoUris(nextPhotoUris: string[]) {
     setPhotoUris(nextPhotoUris);
-
-    try {
-      const storage = await getDiaryStorage();
-      await storage.setItem(`pixelday.diary.photos.${diaryDateKey}`, JSON.stringify(nextPhotoUris));
-    } catch {
-      setSuccessMessage('Chưa lưu được ảnh, thử lại sau.');
-    }
   }
 
   async function pickPhotos() {
@@ -96,6 +89,7 @@ export default function DiaryScreen() {
       orderedSelection: true,
       quality: 0.85,
       selectionLimit: 0,
+      base64: true,
     }).catch(() => null);
 
     if (!result) {
@@ -103,6 +97,7 @@ export default function DiaryScreen() {
         allowsMultipleSelection: false,
         mediaTypes: ['images'],
         quality: 0.85,
+        base64: true,
       });
     }
 
@@ -110,9 +105,37 @@ export default function DiaryScreen() {
       return;
     }
 
-    const nextUris = result.assets.map((asset) => asset.uri).filter(Boolean);
-    await savePhotoUris([...photoUris, ...nextUris]);
-    setSuccessMessage('Đã thêm ảnh vào nhật ký.');
+    if (!token) {
+      setSuccessMessage('Bạn cần đăng nhập lại.');
+      return;
+    }
+
+    setIsSaving(true);
+
+    try {
+      const uploadedUris: string[] = [];
+
+      for (const asset of result.assets) {
+        if (!asset.base64) {
+          continue;
+        }
+
+        const uploaded = await api.uploadDiaryPhoto(token, diaryDateKey, {
+          data: asset.base64,
+          fileName: asset.fileName ?? undefined,
+          mimeType: asset.mimeType ?? undefined,
+        });
+
+        uploadedUris.push(uploaded.photoUri);
+      }
+
+      savePhotoUris([...photoUris, ...uploadedUris]);
+      setSuccessMessage(uploadedUris.length ? 'Đã thêm ảnh vào nhật ký.' : 'Chưa đọc được dữ liệu ảnh.');
+    } catch (error) {
+      setSuccessMessage(error instanceof Error ? error.message : 'Chưa lưu được ảnh, thử lại sau.');
+    } finally {
+      setIsSaving(false);
+    }
   }
 
   return (

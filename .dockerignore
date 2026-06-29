@@ -1,0 +1,17 @@
+node_modules/
+server/node_modules/
+.expo/
+.expo-home/
+server/dist/
+dist/
+web-build/
+.git/
+.env
+.env.*
+server/.env
+server/uploads/
+server/server-data/
+server-data/
+npm-debug.*
+yarn-debug.*
+yarn-error.*

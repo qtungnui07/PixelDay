@@ -18,4 +18,7 @@ export type CalendarEvent = {
   title: string;
   time: string;
   color: string;
+  startsAt?: string;
+  endsAt?: string | null;
+  source?: string;
 };

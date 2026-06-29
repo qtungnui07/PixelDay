@@ -1,21 +1,79 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
+import { useEffect, useMemo, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Card, Pill, PixelScreen } from '@/components/PixelLayout';
 import { usePixelTheme } from '@/components/PixelTheme';
-import { sampleEvents, sampleTasks } from '@/constants/sample-data';
 import { theme } from '@/constants/theme';
+import { api } from '@/lib/api';
+import { useAuth } from '@/lib/auth';
+import type { CalendarEvent, Task } from '@/types';
+
+function getDateKey(date: Date) {
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2, '0');
+  const day = `${date.getDate()}`.padStart(2, '0');
+
+  return `${year}-${month}-${day}`;
+}
+
+function getDayRange(date: Date) {
+  const start = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+  const end = new Date(start);
+  end.setDate(start.getDate() + 1);
+
+  return { start, end };
+}
 
 export default function HomeScreen() {
   const { theme: activeTheme } = usePixelTheme();
+  const { token, user } = useAuth();
+  const [tasks, setTasks] = useState<Task[]>([]);
+  const [events, setEvents] = useState<CalendarEvent[]>([]);
+  const [hasDiary, setHasDiary] = useState(false);
+  const today = useMemo(() => new Date(), []);
+  const todayRange = useMemo(() => getDayRange(today), [today]);
+  const todayKey = getDateKey(today);
+  const displayName = user?.displayName.split(' ')[0] ?? 'bạn';
+  const activeTasks = tasks.filter((task) => task.status !== 'done');
+  const nextEvent = events[0];
+
+  useEffect(() => {
+    async function loadHomeData() {
+      if (!token) {
+        return;
+      }
+
+      const [taskResult, eventResult, diaryResult] = await Promise.all([
+        api.tasks(token),
+        api.events(token, {
+          from: todayRange.start.toISOString(),
+          to: todayRange.end.toISOString(),
+        }),
+        api.diary(token, todayKey),
+      ]);
+
+      setTasks(taskResult.tasks);
+      setEvents(eventResult.events);
+      setHasDiary(Boolean(diaryResult.entry?.content.trim() || diaryResult.entry?.photoUris.length));
+    }
+
+    loadHomeData().catch(() => undefined);
+  }, [todayKey, todayRange.end, todayRange.start, token]);
 
   return (
     <PixelScreen
-      title="Chào An"
-      subtitle="Thứ hai, 29 tháng 6"
+      title={`Chào ${displayName}`}
+      subtitle={today.toLocaleDateString('vi-VN', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+      })}
       rightContent={
         <View style={[styles.avatar, { backgroundColor: activeTheme.colors.peach }]}>
-          <Text style={[styles.avatarText, { color: activeTheme.colors.onPeach }]}>An</Text>
+          <Text style={[styles.avatarText, { color: activeTheme.colors.onPeach }]}>
+            {displayName.slice(0, 2)}
+          </Text>
         </View>
       }>
       <View style={styles.bentoGrid}>
@@ -23,14 +81,14 @@ export default function HomeScreen() {
           <View style={styles.bentoIcon}>
             <MaterialCommunityIcons color={activeTheme.colors.onPrimaryContainer} name="clipboard-check" size={25} />
           </View>
-          <Text style={[styles.bentoValue, { color: activeTheme.colors.onPrimaryContainer }]}>4</Text>
+          <Text style={[styles.bentoValue, { color: activeTheme.colors.onPrimaryContainer }]}>{activeTasks.length}</Text>
           <Text style={[styles.bentoLabel, { color: activeTheme.colors.onPrimaryContainer }]}>việc cần làm</Text>
         </Card>
         <Card style={[styles.bentoCard, { backgroundColor: activeTheme.colors.mint }]}>
           <View style={styles.bentoIcon}>
             <MaterialCommunityIcons color={activeTheme.colors.onMint} name="calendar-month" size={25} />
           </View>
-          <Text style={[styles.bentoValue, { color: activeTheme.colors.onMint }]}>2</Text>
+          <Text style={[styles.bentoValue, { color: activeTheme.colors.onMint }]}>{events.length}</Text>
           <Text style={[styles.bentoLabel, { color: activeTheme.colors.onMint }]}>sự kiện</Text>
         </Card>
       </View>
@@ -39,7 +97,9 @@ export default function HomeScreen() {
         <View style={styles.journalIcon}>
           <MaterialCommunityIcons color={activeTheme.colors.onPeach} name="book-open-variant" size={26} />
         </View>
-        <Text style={[styles.journalTitle, { color: activeTheme.colors.onPeach }]}>Chưa viết nhật ký</Text>
+        <Text style={[styles.journalTitle, { color: activeTheme.colors.onPeach }]}>
+          {hasDiary ? 'Đã viết nhật ký' : 'Chưa viết nhật ký'}
+        </Text>
         <View style={[styles.editCircle, { backgroundColor: activeTheme.colors.onPeach }]}>
           <MaterialCommunityIcons color={activeTheme.colors.peach} name="pencil" size={21} />
         </View>
@@ -50,7 +110,7 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>Việc nổi bật</Text>
           <Pill tone="mint">Đang làm</Pill>
         </View>
-        {sampleTasks.slice(0, 2).map((task) => (
+        {tasks.slice(0, 2).map((task) => (
           <View key={task.id} style={styles.row}>
             <MaterialCommunityIcons
               color={task.status === 'done' ? theme.colors.mint : theme.colors.primary}
@@ -70,8 +130,8 @@ export default function HomeScreen() {
           <Text style={styles.sectionTitle}>Lịch gần nhất</Text>
           <Pill tone="peach">10:00</Pill>
         </View>
-        <Text style={styles.eventTitle}>{sampleEvents[0].title}</Text>
-        <Text style={styles.rowMeta}>{sampleEvents[0].time}</Text>
+        <Text style={styles.eventTitle}>{nextEvent?.title ?? 'Chưa có sự kiện hôm nay'}</Text>
+        <Text style={styles.rowMeta}>{nextEvent?.time ?? 'Thêm hoặc sync Google Calendar'}</Text>
       </Card>
     </PixelScreen>
   );

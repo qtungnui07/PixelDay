@@ -4,6 +4,8 @@ import { View } from 'react-native';
 import 'react-native-reanimated';
 
 import { PixelThemeProvider, usePixelTheme } from '@/components/PixelTheme';
+import { AuthProvider } from '@/lib/auth';
+import { PixelClerkProvider } from '@/lib/clerk';
 
 function RootStack() {
   const { theme: activeTheme, themeName } = usePixelTheme();
@@ -27,8 +29,12 @@ function RootStack() {
 
 export default function RootLayout() {
   return (
-    <PixelThemeProvider>
-      <RootStack />
-    </PixelThemeProvider>
+    <AuthProvider>
+      <PixelClerkProvider>
+        <PixelThemeProvider>
+          <RootStack />
+        </PixelThemeProvider>
+      </PixelClerkProvider>
+    </AuthProvider>
   );
 }

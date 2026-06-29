@@ -5,6 +5,7 @@ node_modules/
 
 # Expo
 .expo/
+.expo-home/
 dist/
 web-build/
 expo-env.d.ts
@@ -25,18 +26,32 @@ expo-env.d.ts
 npm-debug.*
 yarn-debug.*
 yarn-error.*
+*.log
 
 # macOS
 .DS_Store
 *.pem
 
 # local env files
+.env
+.env.*
+!.env.example
+!.env.docker.example
+!server/.env.example
 .env*.local
+server/.env
 
 # typescript
 *.tsbuildinfo
 
+# test/build output
+coverage/
+.nyc_output/
+
 app-example
+server/uploads/
+server/server-data/
+server-data/
 
 # generated native folders
 /ios

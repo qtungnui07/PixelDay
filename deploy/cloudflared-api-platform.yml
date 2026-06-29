@@ -1,0 +1,7 @@
+tunnel: 44df062a-b2f1-4843-935a-6a659367315a
+credentials-file: /home/q/.cloudflared/44df062a-b2f1-4843-935a-6a659367315a.json
+
+ingress:
+  - hostname: api-platform.qtitpc.dev
+    service: http://127.0.0.1:8787
+  - service: http_status:404

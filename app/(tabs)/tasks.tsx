@@ -3,11 +3,11 @@ import { useEffect, useMemo, useState } from 'react';
 import { Modal, Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 
 import { Card, PixelScreen } from '@/components/PixelLayout';
-import { sampleTasks } from '@/constants/sample-data';
 import { theme } from '@/constants/theme';
+import { api } from '@/lib/api';
+import { useAuth } from '@/lib/auth';
 import type { Task, TaskPriority, TaskScope } from '@/types';
 
-const STORAGE_KEY = 'pixelday.tasks.v1';
 const priorities: TaskPriority[] = ['Cao', 'Trung bình', 'Thấp'];
 const scopes: TaskScope[] = ['Ngày', 'Tuần', 'Tháng'];
 
@@ -39,62 +39,29 @@ const priorityColors: Record<TaskPriority, { bg: string; text: string }> = {
   Thấp: { bg: theme.colors.surfaceContainer, text: theme.colors.muted },
 };
 
-async function getTaskStorage() {
-  const storageModule = await import('@react-native-async-storage/async-storage');
-  return storageModule.default;
-}
-
-function normalizeTask(task: Partial<Task>, index: number): Task {
-  const category = task.category ?? task.tag ?? 'Cá nhân';
-
-  return {
-    id: task.id ?? `${Date.now()}-${index}`,
-    title: task.title ?? 'Công việc mới',
-    time: task.time ?? '',
-    status: task.status ?? 'active',
-    tag: task.tag ?? category,
-    priority: task.priority ?? 'Trung bình',
-    category,
-    scope: task.scope ?? 'Ngày',
-  };
-}
-
 export default function TasksScreen() {
-  const [tasks, setTasks] = useState<Task[]>(sampleTasks);
+  const { token } = useAuth();
+  const [tasks, setTasks] = useState<Task[]>([]);
   const [selectedScope, setSelectedScope] = useState<TaskScope>('Tuần');
-  const [isLoaded, setIsLoaded] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form, setForm] = useState<TaskForm>(emptyForm);
 
   useEffect(() => {
     async function loadTasks() {
-      try {
-        const taskStorage = await getTaskStorage();
-        const savedTasks = await taskStorage.getItem(STORAGE_KEY);
+      if (!token) {
+        return;
+      }
 
-        if (savedTasks) {
-          const parsedTasks = JSON.parse(savedTasks) as Partial<Task>[];
-          setTasks(parsedTasks.map(normalizeTask));
-        }
+      try {
+        const result = await api.tasks(token);
+        setTasks(result.tasks);
       } catch {
-        setTasks(sampleTasks);
-      } finally {
-        setIsLoaded(true);
+        setTasks([]);
       }
     }
 
     loadTasks();
-  }, []);
-
-  useEffect(() => {
-    if (!isLoaded) {
-      return;
-    }
-
-    getTaskStorage()
-      .then((taskStorage) => taskStorage.setItem(STORAGE_KEY, JSON.stringify(tasks)))
-      .catch(() => undefined);
-  }, [isLoaded, tasks]);
+  }, [token]);
 
   const visibleTasks = useMemo(
     () => tasks.filter((task) => task.scope === selectedScope),
@@ -108,42 +75,48 @@ export default function TasksScreen() {
     setForm((currentForm) => ({ ...currentForm, [field]: value }));
   }
 
-  function addTask() {
+  async function addTask() {
     const title = form.title.trim();
 
-    if (!title) {
+    if (!title || !token) {
       return;
     }
 
     const category = form.category.trim() || 'Cá nhân';
-    const nextTask: Task = {
-      id: `${Date.now()}`,
+    const result = await api.createTask(token, {
       title,
       time: form.time.trim() || '--:--',
-      status: 'active',
-      tag: category,
       priority: form.priority,
       category,
       scope: form.scope,
-    };
+    });
 
-    setTasks((currentTasks) => [nextTask, ...currentTasks]);
+    setTasks((currentTasks) => [result.task, ...currentTasks]);
     setSelectedScope(form.scope);
     setForm(emptyForm);
     setIsModalVisible(false);
   }
 
-  function toggleTask(taskId: string) {
+  async function toggleTask(taskId: string) {
+    if (!token) {
+      return;
+    }
+
+    const currentTask = tasks.find((task) => task.id === taskId);
+    const nextStatus = currentTask?.status === 'done' ? 'active' : 'done';
+    const result = await api.updateTaskStatus(token, taskId, nextStatus);
+
     setTasks((currentTasks) =>
-      currentTasks.map((task) =>
-        task.id === taskId
-          ? { ...task, status: task.status === 'done' ? 'active' : 'done' }
-          : task
-      )
+      currentTasks.map((task) => (task.id === taskId ? result.task : task))
     );
   }
 
-  function deleteTask(taskId: string) {
+  async function deleteTask(taskId: string) {
+    if (!token) {
+      return;
+    }
+
+    await api.deleteTask(token, taskId);
     setTasks((currentTasks) => currentTasks.filter((task) => task.id !== taskId));
   }
 

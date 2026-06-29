@@ -1,11 +1,47 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { theme } from '@/constants/theme';
+import { ClerkQuickSignInButton, isClerkConfigured } from '@/lib/clerk';
+import { useAuth } from '@/lib/auth';
 
 export default function RegisterScreen() {
+  const { devLogin, register } = useAuth();
+  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function submitRegister() {
+    setMessage('');
+    setIsSubmitting(true);
+
+    try {
+      await register({ displayName, email, password });
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Đăng ký chưa thành công.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function submitDevLogin() {
+    setMessage('');
+    setIsSubmitting(true);
+
+    try {
+      await devLogin();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Đăng nhập nhanh chưa thành công.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.illustration}>
@@ -27,18 +63,54 @@ export default function RegisterScreen() {
         <Text style={styles.subtitle}>Bắt đầu với một không gian nhẹ nhàng cho việc, lịch và nhật ký.</Text>
         <View style={styles.inputRow}>
           <MaterialCommunityIcons color={theme.colors.outline} name="account-outline" size={22} />
-          <TextInput placeholder="Tên của bạn" placeholderTextColor={theme.colors.muted} style={styles.input} />
+          <TextInput
+            placeholder="Tên của bạn"
+            placeholderTextColor={theme.colors.muted}
+            style={styles.input}
+            value={displayName}
+            onChangeText={setDisplayName}
+          />
         </View>
         <View style={styles.inputRow}>
           <MaterialCommunityIcons color={theme.colors.outline} name="email-outline" size={22} />
-          <TextInput autoCapitalize="none" keyboardType="email-address" placeholder="Email" placeholderTextColor={theme.colors.muted} style={styles.input} />
+          <TextInput
+            autoCapitalize="none"
+            keyboardType="email-address"
+            placeholder="Email"
+            placeholderTextColor={theme.colors.muted}
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+          />
         </View>
         <View style={styles.inputRow}>
           <MaterialCommunityIcons color={theme.colors.outline} name="lock-outline" size={22} />
-          <TextInput placeholder="Mật khẩu" placeholderTextColor={theme.colors.muted} secureTextEntry style={styles.input} />
+          <TextInput
+            placeholder="Mật khẩu"
+            placeholderTextColor={theme.colors.muted}
+            secureTextEntry
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+          />
         </View>
-        <Pressable style={styles.primaryButton} onPress={() => router.replace('/home')}>
-          <Text style={styles.primaryText}>Bắt đầu</Text>
+        {message ? <Text style={styles.errorText}>{message}</Text> : null}
+        <Pressable
+          style={[styles.primaryButton, isSubmitting && styles.disabledButton]}
+          onPress={submitRegister}
+          disabled={isSubmitting}>
+          <Text style={styles.primaryText}>{isSubmitting ? 'Đang tạo' : 'Bắt đầu'}</Text>
+        </Pressable>
+        {isClerkConfigured ? (
+          <ClerkQuickSignInButton onMessage={setMessage} />
+        ) : (
+          <View style={styles.clerkHint}>
+            <Text style={styles.clerkHintText}>Clerk cần development build</Text>
+          </View>
+        )}
+        <Pressable style={styles.quickButton} onPress={submitDevLogin} disabled={isSubmitting}>
+          <MaterialCommunityIcons color={theme.colors.onMint} name="flash" size={20} />
+          <Text style={styles.quickText}>Vào nhanh bằng tài khoản dev</Text>
         </Pressable>
         <Link href="/login" asChild>
           <Pressable style={styles.linkButton}>
@@ -154,6 +226,40 @@ const styles = StyleSheet.create({
   primaryText: {
     color: theme.colors.onPrimaryContainer,
     fontSize: 16,
+    fontWeight: '900',
+  },
+  disabledButton: {
+    opacity: 0.55,
+  },
+  errorText: {
+    color: theme.colors.danger,
+    fontSize: 13,
+    fontWeight: '800',
+  },
+  clerkHint: {
+    alignItems: 'center',
+    borderColor: theme.colors.border,
+    borderRadius: theme.radius.pill,
+    borderWidth: 1,
+    paddingVertical: 15,
+  },
+  clerkHintText: {
+    color: theme.colors.muted,
+    fontSize: 13,
+    fontWeight: '800',
+    textAlign: 'center',
+  },
+  quickButton: {
+    alignItems: 'center',
+    backgroundColor: theme.colors.mint,
+    borderRadius: theme.radius.pill,
+    flexDirection: 'row',
+    gap: theme.spacing.sm,
+    justifyContent: 'center',
+    paddingVertical: 15,
+  },
+  quickText: {
+    color: theme.colors.onMint,
     fontWeight: '900',
   },
   linkButton: {

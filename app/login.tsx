@@ -1,11 +1,46 @@
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
-import { Link, router } from 'expo-router';
+import { Link } from 'expo-router';
+import { useState } from 'react';
 import { Pressable, StyleSheet, Text, TextInput, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { theme } from '@/constants/theme';
+import { ClerkQuickSignInButton, isClerkConfigured } from '@/lib/clerk';
+import { useAuth } from '@/lib/auth';
 
 export default function LoginScreen() {
+  const { devLogin, login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function submitLogin() {
+    setMessage('');
+    setIsSubmitting(true);
+
+    try {
+      await login({ email, password });
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Đăng nhập chưa thành công.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
+  async function submitDevLogin() {
+    setMessage('');
+    setIsSubmitting(true);
+
+    try {
+      await devLogin();
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : 'Đăng nhập nhanh chưa thành công.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.illustration}>
@@ -23,19 +58,46 @@ export default function LoginScreen() {
         <Text style={styles.title}>Đăng nhập</Text>
         <View style={styles.inputRow}>
           <MaterialCommunityIcons color={theme.colors.outline} name="email-outline" size={22} />
-          <TextInput autoCapitalize="none" keyboardType="email-address" placeholder="Email" placeholderTextColor={theme.colors.muted} style={styles.input} />
+          <TextInput
+            autoCapitalize="none"
+            keyboardType="email-address"
+            placeholder="Email"
+            placeholderTextColor={theme.colors.muted}
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+          />
         </View>
         <View style={styles.inputRow}>
           <MaterialCommunityIcons color={theme.colors.outline} name="lock-outline" size={22} />
-          <TextInput placeholder="Mật khẩu" placeholderTextColor={theme.colors.muted} secureTextEntry style={styles.input} />
+          <TextInput
+            placeholder="Mật khẩu"
+            placeholderTextColor={theme.colors.muted}
+            secureTextEntry
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+          />
           <MaterialCommunityIcons color={theme.colors.outline} name="eye-off-outline" size={22} />
         </View>
-        <Pressable style={styles.primaryButton} onPress={() => router.replace('/home')}>
-          <Text style={styles.primaryText}>Đăng nhập</Text>
+        {message ? <Text style={styles.errorText}>{message}</Text> : null}
+        <Pressable
+          style={[styles.primaryButton, isSubmitting && styles.disabledButton]}
+          onPress={submitLogin}
+          disabled={isSubmitting}>
+          <Text style={styles.primaryText}>{isSubmitting ? 'Đang đăng nhập' : 'Đăng nhập'}</Text>
         </Pressable>
-        <Pressable style={styles.googleButton}>
-          <Text style={styles.googleMark}>G</Text>
-          <Text style={styles.googleText}>Đăng nhập với Google</Text>
+        {isClerkConfigured ? (
+          <ClerkQuickSignInButton onMessage={setMessage} />
+        ) : (
+          <View style={styles.googleButton}>
+            <Text style={styles.googleMark}>C</Text>
+            <Text style={styles.googleText}>Clerk cần development build</Text>
+          </View>
+        )}
+        <Pressable style={styles.quickButton} onPress={submitDevLogin} disabled={isSubmitting}>
+          <MaterialCommunityIcons color={theme.colors.onMint} name="flash" size={20} />
+          <Text style={styles.quickText}>Vào nhanh bằng tài khoản dev</Text>
         </Pressable>
         <Link href="/register" asChild>
           <Pressable style={styles.linkButton}>
@@ -144,6 +206,14 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: '900',
   },
+  disabledButton: {
+    opacity: 0.55,
+  },
+  errorText: {
+    color: theme.colors.danger,
+    fontSize: 13,
+    fontWeight: '800',
+  },
   googleButton: {
     alignItems: 'center',
     borderColor: theme.colors.border,
@@ -170,5 +240,18 @@ const styles = StyleSheet.create({
   linkText: {
     color: theme.colors.primary,
     fontWeight: '800',
+  },
+  quickButton: {
+    alignItems: 'center',
+    backgroundColor: theme.colors.mint,
+    borderRadius: theme.radius.pill,
+    flexDirection: 'row',
+    gap: theme.spacing.sm,
+    justifyContent: 'center',
+    paddingVertical: 15,
+  },
+  quickText: {
+    color: theme.colors.onMint,
+    fontWeight: '900',
   },
 });

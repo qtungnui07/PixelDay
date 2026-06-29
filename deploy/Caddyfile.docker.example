@@ -1,0 +1,8 @@
+api-platform.qtitpc.dev {
+  reverse_proxy 127.0.0.1:8787
+}
+
+# Optional web frontend if you want a browser version too.
+pixelday.qtitpc.dev {
+  reverse_proxy 127.0.0.1:8088
+}
