@@ -3,14 +3,16 @@ import { StatusBar } from 'expo-status-bar';
 import { View } from 'react-native';
 import 'react-native-reanimated';
 
-import { theme } from '@/constants/theme';
+import { PixelThemeProvider, usePixelTheme } from '@/components/PixelTheme';
 
-export default function RootLayout() {
+function RootStack() {
+  const { theme: activeTheme, themeName } = usePixelTheme();
+
   return (
-    <View style={{ flex: 1, backgroundColor: theme.colors.background }}>
+    <View style={{ flex: 1, backgroundColor: activeTheme.colors.background }}>
       <Stack
         screenOptions={{
-          contentStyle: { backgroundColor: theme.colors.background },
+          contentStyle: { backgroundColor: activeTheme.colors.background },
           headerShown: false,
         }}>
         <Stack.Screen name="index" />
@@ -18,7 +20,15 @@ export default function RootLayout() {
         <Stack.Screen name="register" />
         <Stack.Screen name="(tabs)" />
       </Stack>
-      <StatusBar style="dark" />
+      <StatusBar style={themeName === 'light' ? 'dark' : 'light'} />
     </View>
+  );
+}
+
+export default function RootLayout() {
+  return (
+    <PixelThemeProvider>
+      <RootStack />
+    </PixelThemeProvider>
   );
 }

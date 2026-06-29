@@ -3,7 +3,7 @@ import type { ComponentProps } from 'react';
 import { Tabs } from 'expo-router';
 
 import { HapticTab } from '@/components/haptic-tab';
-import { theme } from '@/constants/theme';
+import { usePixelTheme } from '@/components/PixelTheme';
 
 type IconName = ComponentProps<typeof MaterialCommunityIcons>['name'];
 
@@ -16,13 +16,15 @@ const tabs: Record<string, { title: string; icon: IconName; activeIcon: IconName
 };
 
 export default function TabLayout() {
+  const { theme: activeTheme } = usePixelTheme();
+
   return (
     <Tabs
       screenOptions={({ route }) => ({
         headerShown: false,
-        sceneStyle: { backgroundColor: theme.colors.background },
-        tabBarActiveTintColor: theme.colors.primary,
-        tabBarInactiveTintColor: theme.colors.muted,
+        sceneStyle: { backgroundColor: activeTheme.colors.background },
+        tabBarActiveTintColor: activeTheme.colors.primary,
+        tabBarInactiveTintColor: activeTheme.colors.muted,
         tabBarButton: HapticTab,
         tabBarIcon: ({ color, focused, size }) => {
           const tab = tabs[route.name];
@@ -32,7 +34,7 @@ export default function TabLayout() {
               name={focused ? tab.activeIcon : tab.icon}
               size={size + 2}
               style={{
-                backgroundColor: focused ? theme.colors.primaryContainer : 'transparent',
+                backgroundColor: focused ? activeTheme.colors.primaryContainer : 'transparent',
                 borderRadius: 999,
                 overflow: 'hidden',
                 paddingHorizontal: focused ? 18 : 0,
@@ -47,8 +49,8 @@ export default function TabLayout() {
           letterSpacing: 0,
         },
         tabBarStyle: {
-          backgroundColor: theme.colors.surfaceLow,
-          borderTopColor: 'rgba(201, 197, 205, 0.35)',
+          backgroundColor: activeTheme.colors.surfaceLow,
+          borderTopColor: activeTheme.colors.border,
           height: 78,
           paddingBottom: 12,
           paddingTop: 8,

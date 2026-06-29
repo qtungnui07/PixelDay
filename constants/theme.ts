@@ -1,6 +1,9 @@
 import { Platform } from 'react-native';
 
-export const theme = {
+export type PixelThemeName = 'light' | 'dark' | 'nord';
+
+export const lightTheme = {
+  name: 'light' as const,
   colors: {
     primary: '#5E5C75',
     onPrimary: '#FFFFFF',
@@ -46,6 +49,85 @@ export const theme = {
     elevation: 2,
   },
 };
+
+export const darkTheme = {
+  ...lightTheme,
+  name: 'dark' as const,
+  colors: {
+    ...lightTheme.colors,
+    primary: '#C8BFFF',
+    onPrimary: '#18151F',
+    primaryContainer: '#3F3A54',
+    onPrimaryContainer: '#F0ECFF',
+    mint: '#7EC7A2',
+    onMint: '#102218',
+    peach: '#F0B08B',
+    onPeach: '#2A160E',
+    background: '#101014',
+    surface: '#1D1B24',
+    surfaceLow: '#191820',
+    surfaceContainer: '#282633',
+    surfaceHigh: '#343044',
+    text: '#F4EFF4',
+    muted: '#D6CEDA',
+    outline: '#B6ADC0',
+    border: '#4F4A5E',
+    lavenderSoft: '#3F3A54',
+    mintSoft: '#315744',
+    peachSoft: '#5E3E30',
+    errorContainer: '#6F2A20',
+    danger: '#FFB4A8',
+  },
+  shadow: {
+    ...lightTheme.shadow,
+    shadowColor: '#000000',
+    shadowOpacity: 0.22,
+  },
+};
+
+export const nordTheme = {
+  ...darkTheme,
+  name: 'nord' as const,
+  colors: {
+    ...darkTheme.colors,
+    primary: '#88C0D0',
+    onPrimary: '#2E3440',
+    primaryContainer: '#434C5E',
+    onPrimaryContainer: '#ECEFF4',
+    mint: '#A3BE8C',
+    onMint: '#2E3440',
+    peach: '#EBCB8B',
+    onPeach: '#2E3440',
+    background: '#2E3440',
+    surface: '#3B4252',
+    surfaceLow: '#3B4252',
+    surfaceContainer: '#434C5E',
+    surfaceHigh: '#4C566A',
+    text: '#ECEFF4',
+    muted: '#D8DEE9',
+    outline: '#81A1C1',
+    border: '#4C566A',
+    lavenderSoft: '#5E81AC',
+    mintSoft: '#8FBCBB',
+    peachSoft: '#D08770',
+    errorContainer: '#5E3A41',
+    danger: '#BF616A',
+  },
+  shadow: {
+    ...darkTheme.shadow,
+    shadowColor: '#1E222A',
+  },
+};
+
+export const pixelThemes = {
+  light: lightTheme,
+  dark: darkTheme,
+  nord: nordTheme,
+};
+
+export type PixelTheme = (typeof pixelThemes)[PixelThemeName];
+
+export const theme = lightTheme;
 
 const tintColorLight = theme.colors.primary;
 const tintColorDark = theme.colors.surface;

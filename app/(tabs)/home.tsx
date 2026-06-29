@@ -2,43 +2,46 @@ import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Card, Pill, PixelScreen } from '@/components/PixelLayout';
+import { usePixelTheme } from '@/components/PixelTheme';
 import { sampleEvents, sampleTasks } from '@/constants/sample-data';
 import { theme } from '@/constants/theme';
 
 export default function HomeScreen() {
+  const { theme: activeTheme } = usePixelTheme();
+
   return (
     <PixelScreen
       title="Chào An"
       subtitle="Thứ hai, 29 tháng 6"
       rightContent={
-        <View style={styles.avatar}>
-          <Text style={styles.avatarText}>An</Text>
+        <View style={[styles.avatar, { backgroundColor: activeTheme.colors.peach }]}>
+          <Text style={[styles.avatarText, { color: activeTheme.colors.onPeach }]}>An</Text>
         </View>
       }>
       <View style={styles.bentoGrid}>
-        <Card style={[styles.bentoCard, styles.taskBento]}>
+        <Card style={[styles.bentoCard, { backgroundColor: activeTheme.colors.primaryContainer }]}>
           <View style={styles.bentoIcon}>
-            <MaterialCommunityIcons color={theme.colors.onPrimaryContainer} name="clipboard-check" size={25} />
+            <MaterialCommunityIcons color={activeTheme.colors.onPrimaryContainer} name="clipboard-check" size={25} />
           </View>
-          <Text style={styles.bentoValue}>4</Text>
-          <Text style={styles.bentoLabel}>việc cần làm</Text>
+          <Text style={[styles.bentoValue, { color: activeTheme.colors.onPrimaryContainer }]}>4</Text>
+          <Text style={[styles.bentoLabel, { color: activeTheme.colors.onPrimaryContainer }]}>việc cần làm</Text>
         </Card>
-        <Card style={[styles.bentoCard, styles.eventBento]}>
+        <Card style={[styles.bentoCard, { backgroundColor: activeTheme.colors.mint }]}>
           <View style={styles.bentoIcon}>
-            <MaterialCommunityIcons color={theme.colors.onMint} name="calendar-month" size={25} />
+            <MaterialCommunityIcons color={activeTheme.colors.onMint} name="calendar-month" size={25} />
           </View>
-          <Text style={[styles.bentoValue, { color: theme.colors.onMint }]}>2</Text>
-          <Text style={[styles.bentoLabel, { color: theme.colors.onMint }]}>sự kiện</Text>
+          <Text style={[styles.bentoValue, { color: activeTheme.colors.onMint }]}>2</Text>
+          <Text style={[styles.bentoLabel, { color: activeTheme.colors.onMint }]}>sự kiện</Text>
         </Card>
       </View>
 
-      <Card style={styles.journalBento}>
+      <Card style={[styles.journalBento, { backgroundColor: activeTheme.colors.peach }]}>
         <View style={styles.journalIcon}>
-          <MaterialCommunityIcons color={theme.colors.onPeach} name="book-open-variant" size={26} />
+          <MaterialCommunityIcons color={activeTheme.colors.onPeach} name="book-open-variant" size={26} />
         </View>
-        <Text style={styles.journalTitle}>Chưa viết nhật ký</Text>
-        <View style={styles.editCircle}>
-          <MaterialCommunityIcons color={theme.colors.peach} name="pencil" size={21} />
+        <Text style={[styles.journalTitle, { color: activeTheme.colors.onPeach }]}>Chưa viết nhật ký</Text>
+        <View style={[styles.editCircle, { backgroundColor: activeTheme.colors.onPeach }]}>
+          <MaterialCommunityIcons color={activeTheme.colors.peach} name="pencil" size={21} />
         </View>
       </Card>
 
